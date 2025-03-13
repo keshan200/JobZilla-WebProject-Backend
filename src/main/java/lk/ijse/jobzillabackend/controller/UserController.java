@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/user")
 @CrossOrigin
@@ -38,9 +40,15 @@ public class UserController {
                 case VarList.Created -> {
                     String token = jwtUtil.generateToken(userDTO);
 
+                    String refreshToken = jwtUtil.generateRefreshToken(userDTO);
+
+
                     AuthDTO authDTO = new AuthDTO();
                     authDTO.setEmail(userDTO.getEmail());
                     authDTO.setToken(token);
+                    authDTO.setRefreshToken(refreshToken);
+
+                    System.out.println("Refresh Token: " + refreshToken);
 
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created, "Success", authDTO));
@@ -65,5 +73,53 @@ public class UserController {
         }
 
     }
+
+    @PutMapping(value = "/update")
+    public ResponseEntity<ResponseDTO> updateUser(@RequestBody @Valid UserDTO userDTO) {
+
+        try{
+            int res = userService.updateUser(userDTO);
+
+            switch (res) {
+                case VarList.Created ->{
+                    String token = jwtUtil.generateToken(userDTO);
+                    AuthDTO authDTO = new AuthDTO();
+                    authDTO.setEmail(userDTO.getEmail());
+                    authDTO.setToken(token);
+
+                    return ResponseEntity.status(HttpStatus.OK)
+                            .body(new ResponseDTO(VarList.Created, "Success", authDTO));
+                }
+
+                case VarList.Not_Acceptable -> {
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                            .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+                }
+
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                            .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+                }
+
+             }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping(value = "getAll")
+    public List<UserDTO> getAllUsers() {
+
+        try {
+           return userService.getAll();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
 
 }

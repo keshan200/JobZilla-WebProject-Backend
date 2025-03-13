@@ -13,5 +13,6 @@ public class AuthDTO {
     private String email;
     private String password;
     private String token;
+    private String refreshToken;
 
 }

@@ -7,12 +7,17 @@ import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.UserService;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl  implements UserService , UserDetailsService {
@@ -23,7 +28,8 @@ public class UserServiceImpl  implements UserService , UserDetailsService {
     @Autowired
     private ModelMapper modelMapper;
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -44,4 +50,33 @@ public class UserServiceImpl  implements UserService , UserDetailsService {
         }
 
     }
+
+    @Override
+    public int updateUser(UserDTO userDTO) {
+
+        if (userRepository.findById(userDTO.getUid()).isPresent()) {
+
+            userDTO.setUsername(userDTO.getUsername());
+            userDTO.setEmail(userDTO.getEmail());
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+            userRepository.save(modelMapper.map(userDTO, User.class));
+            return VarList.Created;
+        } else {
+            return VarList.Not_Modified;
+        }
+    }
+
+    @Override
+    public int deleteUser(int id) {
+        return 0;
+    }
+
+
+    @Override
+    public List<UserDTO> getAll() {
+        return modelMapper.map(userRepository.findAll(),new TypeToken<List<UserDTO>>(){}.getType());
+    }
+
+
 }

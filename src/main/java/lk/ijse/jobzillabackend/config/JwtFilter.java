@@ -58,7 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
             UserDetails userDetails
                     = userService.loadUserByUsername(email);
 
-            if (jwtUtil.validateToken(token, userDetails)) {
+            if (jwtUtil.validateToken(token, userDetails)&&jwtUtil.validateRefreshToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
                         = new UsernamePasswordAuthenticationToken(userDetails,
                         null, userDetails.getAuthorities());

@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 
@@ -23,6 +24,10 @@ public class JwtUtil implements Serializable {
     private static final long serialVersionUID = 234234523523L;
 
     public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 12;
+
+
+    // Refresh token validity: 15 minutes
+    public static final long REFRESH_TOKEN_VALIDITY = 15 * 60;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -51,6 +56,31 @@ public class JwtUtil implements Serializable {
     //for retrieving any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+    }
+
+
+    // Generate refresh token
+    public String generateRefreshToken(UserDTO userDTO) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("unique_id", UUID.randomUUID().toString()); // Add a unique identifier
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDTO.getEmail())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000)) // 1 second validity
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
+
+
+    // Validate refresh token
+    public Boolean validateRefreshToken(String token, UserDetails userDetails) {
+        try {
+            final String username = getUsernameFromToken(token);
+            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

@@ -40,6 +40,7 @@ public class WebSecurityConfig {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
@@ -51,7 +52,11 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/user/register"
+                                "/api/v1/user/register",
+                                "/api/v1/user/update",
+                                "/api/v1/user/getAll",
+                                "/api/v1/company/register",
+                                "/api/v1/company/update"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )
