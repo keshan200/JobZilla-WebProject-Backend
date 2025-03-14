@@ -9,6 +9,7 @@ import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,7 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -33,8 +36,21 @@ public class UserServiceImpl  implements UserService , UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
+    }
+
+
+    private Set<SimpleGrantedAuthority> getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+        return authorities;
+    }
+
+    public UserDTO loadUserByEmail(String email) throws UsernameNotFoundException {
+        User byEmail = userRepository.findByEmail(email);
+        return modelMapper.map(byEmail, UserDTO.class);
     }
 
 
@@ -44,6 +60,7 @@ public class UserServiceImpl  implements UserService , UserDetailsService {
             return VarList.Not_Acceptable;
         } else {
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
             userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
             userRepository.save(modelMapper.map(userDTO, User.class));
             return VarList.Created;
@@ -55,8 +72,6 @@ public class UserServiceImpl  implements UserService , UserDetailsService {
     public int updateUser(UserDTO userDTO) {
 
         if (userRepository.findById(userDTO.getUid()).isPresent()) {
-
-            userDTO.setUsername(userDTO.getUsername());
             userDTO.setEmail(userDTO.getEmail());
             userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 

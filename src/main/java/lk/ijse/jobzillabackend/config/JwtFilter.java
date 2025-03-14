@@ -27,12 +27,12 @@ import java.io.IOException;
  */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
     @Autowired
     private JwtUtil jwtUtil;
 
     @Autowired
     private UserServiceImpl userService;
-
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -73,6 +73,11 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
+
+
+
+
+
 
     private Claims getClaimsFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();

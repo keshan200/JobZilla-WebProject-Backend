@@ -32,18 +32,19 @@ public class JwtUtil implements Serializable {
     @Value("${jwt.secret}")
     private String secretKey;
 
+
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    public Claims getUserRoleCodeFromToken(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-    }
-
     //retrieve expiration date from jwt token
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public Claims getUserRoleCodeFromToken(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
 
@@ -62,12 +63,12 @@ public class JwtUtil implements Serializable {
     // Generate refresh token
     public String generateRefreshToken(UserDTO userDTO) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("unique_id", UUID.randomUUID().toString()); // Add a unique identifier
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDTO.getEmail())
+                .setSubject(userDTO.getUsername())
+                .setSubject(userDTO.getRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000)) // 1 second validity
+                .setExpiration(new Date(System.currentTimeMillis() +JWT_TOKEN_VALIDITY * 1000))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
@@ -95,6 +96,7 @@ public class JwtUtil implements Serializable {
     public String generateToken(UserDTO userDTO) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role",userDTO.getRole());
+
         return doGenerateToken(claims, userDTO.getEmail());
     }
 

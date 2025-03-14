@@ -52,11 +52,11 @@ public class CompanyController {
     public Company updateCompany(@RequestBody @Valid CompanyDTO companyDTO) {
 
         Company res = companyService.updateCompany(companyDTO);
-
-
         System.out.println(companyDTO.getCid());
 
         return res;
     }
 
 }
+
+

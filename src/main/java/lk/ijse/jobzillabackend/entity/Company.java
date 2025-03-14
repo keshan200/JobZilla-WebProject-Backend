@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -24,7 +25,6 @@ public class Company implements Serializable {
     private String country;
     private String city;
     private String full_address;
-    private int mobile_number;
     private String description;
     private String Logo_img;
     private String background_img;
@@ -33,6 +33,9 @@ public class Company implements Serializable {
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SocialMedia> socialMediaProfiles;
 
 
 }

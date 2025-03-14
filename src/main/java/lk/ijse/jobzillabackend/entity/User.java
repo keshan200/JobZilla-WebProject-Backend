@@ -1,9 +1,8 @@
 package lk.ijse.jobzillabackend.entity;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
-import lk.ijse.jobzillabackend.util.UUIDDeserializer;
+import lk.ijse.jobzillabackend.util.ActiveStatusConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,8 +22,21 @@ public class User implements Serializable {
 
     @Column(unique = true)
     private String email;
+
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private int mobile;
+
+    @Column(nullable = false)
     private String role;
 
+
+    @Convert(converter = ActiveStatusConverter.class)
+    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'Active'")
+    private boolean active;
 }

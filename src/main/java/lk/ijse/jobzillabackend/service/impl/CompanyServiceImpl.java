@@ -52,7 +52,6 @@ public class CompanyServiceImpl implements CompanyService{
         existingCompany.setDescription(companyDto.getDescription());
         existingCompany.setEst_since(companyDto.getEst_since());
         existingCompany.setFull_address(companyDto.getFull_address());
-        existingCompany.setMobile_number(companyDto.getMobile_number());
 
 
         System.out.println(companyDto.getCid());

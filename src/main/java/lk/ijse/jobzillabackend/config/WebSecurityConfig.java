@@ -43,9 +43,11 @@ public class WebSecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+             throws Exception {
+            return authenticationConfiguration.getAuthenticationManager();
     }
+
+
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -53,10 +55,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/user/register",
+                                "/api/v1/auth/signIn",
                                 "/api/v1/user/update",
                                 "/api/v1/user/getAll",
                                 "/api/v1/company/register",
-                                "/api/v1/company/update"
+                                "/api/v1/company/update",
+                                "api/v1/socialMedia/register"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )

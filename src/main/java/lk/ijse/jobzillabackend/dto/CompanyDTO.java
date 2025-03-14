@@ -34,11 +34,6 @@ public class CompanyDTO {
     @Size(max = 255, message = "Full address cannot exceed 255 characters")
     private String full_address;
 
-    @NotNull(message = "Mobile number is required")
-    @Min(value = 1000000000, message = "Mobile number must be at least 10 digits")
-    @Max(value = 9999999999L, message = "Mobile number cannot exceed 10 digits")
-    private int mobile_number;
-
     @NotBlank(message = "Description is required")
     @Size(max = 500, message = "Description cannot exceed 500 characters  ")
     private String description;
