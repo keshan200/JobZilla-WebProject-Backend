@@ -27,9 +27,11 @@ public class SocialMediaImpl implements SocialMediaService {
     @Override
     public int saveSocialMedia(SocialMediaDTO socialMediaDTO) {
       if (socialMediaRepository.existsById(socialMediaDTO.getSid())){
+          System.out.println(socialMediaDTO.getSid());
           return VarList.Not_Acceptable;
       }else {
           socialMediaRepository.save(modelMapper.map(socialMediaDTO, SocialMedia.class));
+          System.out.println(socialMediaDTO.getSid());
           return VarList.Created;
       }
     }

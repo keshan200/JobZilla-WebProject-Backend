@@ -55,15 +55,12 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/user/register",
-                                "/api/v1/auth/signIn",
-                                "/api/v1/user/update",
-                                "/api/v1/user/getAll",
-                                "/api/v1/company/register",
-                                "/api/v1/company/update",
-                                "api/v1/socialMedia/register"
+                                "/api/v1/auth/signIn"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )
+
+
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -71,3 +68,8 @@ public class WebSecurityConfig {
 
 
 }
+
+
+/*"api/v1/company/register",
+        "/api/v1/company/update",
+        "api/v1/socialMedia/register"*/

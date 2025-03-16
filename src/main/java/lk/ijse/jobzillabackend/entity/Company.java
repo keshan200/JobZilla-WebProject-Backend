@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,6 +20,8 @@ public class Company implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "cid", columnDefinition = "VARCHAR(36)", unique = true, nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID cid;
 
     @Column(nullable = false)

@@ -54,7 +54,6 @@ public class CompanyServiceImpl implements CompanyService{
         existingCompany.setFull_address(companyDto.getFull_address());
 
 
-        System.out.println(companyDto.getCid());
         return companyRepository.save(existingCompany);
 
     }

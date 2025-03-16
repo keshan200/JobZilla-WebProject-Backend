@@ -24,7 +24,7 @@ public class UserController {
 
 
 
-    public UserController(UserService userService, JwtUtil jwtUtil, AuthDTO authDTO) {
+    public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
@@ -119,6 +119,8 @@ public class UserController {
         }
 
     }
+
+
 
 
 

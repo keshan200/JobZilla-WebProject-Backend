@@ -1,22 +1,19 @@
 package lk.ijse.jobzillabackend.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
-import lk.ijse.jobzillabackend.entity.Company;
-import lk.ijse.jobzillabackend.util.UUIDDeserializer;
+import lk.ijse.jobzillabackend.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserDTO implements Serializable {
+public class UserDTO{
 
-    @JsonDeserialize(using = UUIDDeserializer.class)
+  /*  @JsonDeserialize(using = UUIDDeserializer.class)*/
     private UUID uid;
 
     @NotBlank(message = "email is required")
@@ -33,6 +30,7 @@ public class UserDTO implements Serializable {
     private int mobile;
 
     @NotNull(message = "role must be required")
+    @Pattern(regexp = "^(EMPLOYER|CANDIDATE)$", message = "Role must be either EMPLOYER or CANDIDATE")
     private String role;
 
     private boolean status = true;

@@ -1,13 +1,13 @@
 package lk.ijse.jobzillabackend.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.*;
+import lk.ijse.jobzillabackend.entity.SocialMedia;
 import lk.ijse.jobzillabackend.entity.User;
-import lk.ijse.jobzillabackend.util.UUIDDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Data
 public class CompanyDTO {
 
-    @JsonDeserialize(using = UUIDDeserializer.class)
+    /*@JsonDeserialize(using = UUIDDeserializer.class)*/
     private UUID cid;
 
     @NotBlank(message = "Company name is required")
@@ -50,4 +50,6 @@ public class CompanyDTO {
 
 
     private User user;
+
+    private List<SocialMedia> socialMediaProfiles;
 }
