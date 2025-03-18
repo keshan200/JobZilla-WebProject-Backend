@@ -35,12 +35,10 @@ public class CompanyController {
     @PreAuthorize("hasAnyAuthority('EMPLOYER')")
     public ResponseEntity<ResponseDTO> registerCompany(@RequestBody @Valid CompanyDTO companyDTO) {
 
-
         User user = userRepository.findById(companyDTO.getUser().getUid())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         System.out.println(user);
-
         try{
             int res = companyService.saveCompany(companyDTO);
 

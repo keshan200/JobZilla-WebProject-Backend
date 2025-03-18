@@ -55,7 +55,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/user/register",
-                                "/api/v1/auth/signIn"
+                                "/api/v1/auth/signIn",
+                                "/api/v1/auth/refreshToken"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )

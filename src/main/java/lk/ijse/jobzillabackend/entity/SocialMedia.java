@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-public class SocialMedia {
+public class SocialMedia implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

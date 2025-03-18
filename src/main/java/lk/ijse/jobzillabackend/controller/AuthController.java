@@ -45,7 +45,6 @@ public class AuthController {
     public ResponseEntity<ResponseDTO> authenticate(@RequestBody UserDTO userDTO) {
 
         try{
-
            authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userDTO.getEmail(),userDTO.getPassword()));
 
@@ -76,5 +75,51 @@ public class AuthController {
                 .body(new ResponseDTO(VarList.Created, "Success", authDTO));
 
     }
+
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity<ResponseDTO> refreshToken(@RequestBody AuthDTO authDTO) {
+        try {
+            // Validate the refresh token
+            if (!jwtUtil.validateRefreshToken(authDTO.getRefreshToken())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ResponseDTO(VarList.Unauthorized, "Invalid Refresh Token", null));
+            }
+
+            // Extract the user details from the refresh token
+            String email = jwtUtil.getUsernameFromToken(authDTO.getRefreshToken());
+            if (email == null || email.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ResponseDTO(VarList.Unauthorized, "Invalid Refresh Token", null));
+            }
+
+            // Load the user by email
+            UserDTO user = userService.loadUserByEmail(email);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(VarList.Not_Found, "User not found", null));
+            }
+
+            // Generate a new access token
+            String newAccessToken = jwtUtil.generateToken(user);
+            if (newAccessToken == null || newAccessToken.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ResponseDTO(VarList.Conflict, "Token Generation Failure", null));
+            }
+
+            // Prepare response with the new token
+            AuthDTO newAuthDTO = new AuthDTO();
+            newAuthDTO.setEmail(user.getEmail());
+            newAuthDTO.setToken(newAccessToken);
+            newAuthDTO.setRefreshToken(authDTO.getRefreshToken()); // Return the same refresh token
+
+            return ResponseEntity.ok(new ResponseDTO(VarList.Created, "Token Refreshed Successfully", newAuthDTO));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, "Error refreshing token", e.getMessage()));
+        }
+    }
+
 
 }

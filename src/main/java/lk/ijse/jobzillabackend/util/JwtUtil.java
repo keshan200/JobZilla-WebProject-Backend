@@ -1,8 +1,6 @@
 package lk.ijse.jobzillabackend.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -116,5 +114,23 @@ public class JwtUtil implements Serializable {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public boolean validateRefreshToken(String refreshToken) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+
+            Date expirationDate = claims.getExpiration();
+            return expirationDate.after(new Date());
+        } catch (ExpiredJwtException e) {
+            System.out.println("Refresh token expired: " + e.getMessage());
+        } catch (JwtException e) {
+            System.out.println("Invalid refresh token: " + e.getMessage());
+        }
+        return false;
     }
 }

@@ -1,6 +1,5 @@
 package lk.ijse.jobzillabackend.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,23 +8,38 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-public class Company implements Serializable {
+public class Candidate implements Serializable {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "cid", columnDefinition = "VARCHAR(36)", unique = true, nullable = false)
+    @Column(columnDefinition = "VARCHAR(36)", unique = true, nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID cid;
+    private UUID cand_id;
+
+    private String img;
 
     @Column(nullable = false)
-    private String company_name;
+    private String name;
+
+    @Column(nullable = false)
+    private int age;
+
+    @Column(nullable = false)
+    private String gender;
+
+    private String experience;
+
+    private String website;
 
     @Column(nullable = false)
     private String country;
@@ -39,21 +53,13 @@ public class Company implements Serializable {
     @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
-    private String Logo_img;
-
-    @Column(nullable = false)
-    private String background_img;
-
-    @Column(nullable = false)
-    private String est_since;
+    @ElementCollection
+    private List<String> skills = new ArrayList<>();
 
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SocialMedia> socialMediaProfiles;
-
-
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Qualification> qualifications = new ArrayList<>();
 }
