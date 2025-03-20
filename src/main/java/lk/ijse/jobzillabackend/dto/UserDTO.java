@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.dto;
 
 import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.User;
+import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +34,7 @@ public class UserDTO{
     @Pattern(regexp = "^(EMPLOYER|CANDIDATE)$", message = "Role must be either EMPLOYER or CANDIDATE")
     private String role;
 
-    private boolean status = true;
+    private Status status ;
 
 
 }

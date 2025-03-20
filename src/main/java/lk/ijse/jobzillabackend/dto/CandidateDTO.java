@@ -1,6 +1,5 @@
 package lk.ijse.jobzillabackend.dto;
 
-import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -57,6 +56,7 @@ public class CandidateDTO {
 
     private User user;
 
-    private List<Qualification> qualifications = new ArrayList<>();
+  /*  @NotNull(message = "Qualification list cannot be null")
+    private List<QualificationDTO> qualifications = new ArrayList<>();*/
 
 }

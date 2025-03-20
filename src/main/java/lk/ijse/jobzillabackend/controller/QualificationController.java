@@ -1,7 +1,7 @@
 package lk.ijse.jobzillabackend.controller;
 
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
 import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.QualificationDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
@@ -9,10 +9,13 @@ import lk.ijse.jobzillabackend.service.QualificationService;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("api/v1/qualification")
@@ -27,14 +30,15 @@ public class QualificationController {
 
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('CANDIDATE')")
     public ResponseEntity<ResponseDTO> addQualifications(@RequestBody @Valid QualificationDTO qualificationDTO) {
 
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.: " + qualificationDTO);
         try {
             int response = qualificationService.saveQualification(qualificationDTO);
 
             switch (response){
                 case VarList.Created -> {
+                    qualificationDTO.setQul_id(UUID.randomUUID());
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created,"Success",qualificationDTO));
 

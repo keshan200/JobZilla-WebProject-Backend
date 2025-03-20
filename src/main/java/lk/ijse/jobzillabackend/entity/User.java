@@ -1,18 +1,14 @@
 package lk.ijse.jobzillabackend.entity;
 
 
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.deser.std.UUIDDeserializer;
 import jakarta.persistence.*;
-import lk.ijse.jobzillabackend.util.ActiveStatusConverter;
+import lk.ijse.jobzillabackend.enums.Status;
+import lk.ijse.jobzillabackend.enums.UserRole;
 import lk.ijse.jobzillabackend.validations.ValidRoleBasedEmail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 
@@ -50,7 +46,14 @@ public class User implements Serializable {
     private UserRole role;
 
 
-    @Convert(converter = ActiveStatusConverter.class)
-    @Column(nullable = false, columnDefinition = "VARCHAR(20) DEFAULT 'Active'")
-    private boolean active;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = Status.ACTIVE;
+        }
+    }
 }

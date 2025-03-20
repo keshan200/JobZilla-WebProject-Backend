@@ -15,8 +15,9 @@ import java.util.UUID;
 public class SocialMediaDTO {
 
 
-    private UUID sid;
+    private int sid;
 
+    @Pattern(regexp = "WhatsApp|Facebook|LinkedIn|Instagram", message = "Invalid platform. Allowed values are: WhatsApp, Facebook, LinkedIn, Instagram.")
     private String platform;
 
     @Pattern(regexp = "^(http|https)://.*$", message = "URL must start with http:// or https://")

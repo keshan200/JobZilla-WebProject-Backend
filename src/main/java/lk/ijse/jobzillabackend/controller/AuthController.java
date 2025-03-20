@@ -4,9 +4,12 @@ import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.AuthDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
+import lk.ijse.jobzillabackend.entity.User;
+import lk.ijse.jobzillabackend.enums.Status;
 import lk.ijse.jobzillabackend.service.impl.UserServiceImpl;
 import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,6 +69,11 @@ public class AuthController {
                     .body(new ResponseDTO(VarList.Conflict,"Authorization Failure ",null));
         }
 
+        if (user.getStatus() != Status.ACTIVE) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ResponseDTO(VarList.Forbidden, "Your account is suspended. Please contact support.", null));
+        }
+
         AuthDTO authDTO = new AuthDTO();
         authDTO.setEmail(user.getEmail());
         authDTO.setToken(token);
@@ -80,38 +88,42 @@ public class AuthController {
     @PostMapping("/refreshToken")
     public ResponseEntity<ResponseDTO> refreshToken(@RequestBody AuthDTO authDTO) {
         try {
-            // Validate the refresh token
+
             if (!jwtUtil.validateRefreshToken(authDTO.getRefreshToken())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new ResponseDTO(VarList.Unauthorized, "Invalid Refresh Token", null));
             }
 
-            // Extract the user details from the refresh token
+
             String email = jwtUtil.getUsernameFromToken(authDTO.getRefreshToken());
             if (email == null || email.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new ResponseDTO(VarList.Unauthorized, "Invalid Refresh Token", null));
             }
 
-            // Load the user by email
+
             UserDTO user = userService.loadUserByEmail(email);
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ResponseDTO(VarList.Not_Found, "User not found", null));
             }
 
-            // Generate a new access token
+
+
+
             String newAccessToken = jwtUtil.generateToken(user);
             if (newAccessToken == null || newAccessToken.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(new ResponseDTO(VarList.Conflict, "Token Generation Failure", null));
             }
 
-            // Prepare response with the new token
+
+
+
             AuthDTO newAuthDTO = new AuthDTO();
             newAuthDTO.setEmail(user.getEmail());
             newAuthDTO.setToken(newAccessToken);
-            newAuthDTO.setRefreshToken(authDTO.getRefreshToken()); // Return the same refresh token
+            newAuthDTO.setRefreshToken(authDTO.getRefreshToken());
 
             return ResponseEntity.ok(new ResponseDTO(VarList.Created, "Token Refreshed Successfully", newAuthDTO));
 

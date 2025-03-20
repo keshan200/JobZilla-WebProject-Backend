@@ -8,7 +8,7 @@ public class ActiveStatusConverter implements AttributeConverter<Boolean, String
 
     @Override
     public String convertToDatabaseColumn(Boolean active) {
-        return (active != null && active) ? "Deactivate" : "Active";
+        return (active != null && active) ? "Active" : "Deactivate";
     }
 
     @Override

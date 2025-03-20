@@ -37,6 +37,9 @@ public class SocialMediaController {
     @PreAuthorize("hasAuthority('EMPLOYER')")
     @PostMapping("/save")
     public ResponseEntity<ResponseDTO> saveSocialMedia(@RequestBody @Valid SocialMediaDTO socialMediaDTO) {
+
+
+        System.out.println(">>>>>>>>>>>>>>>>."+socialMediaDTO);
                 try{
                     int res = socialMediaService.saveSocialMedia(socialMediaDTO);
                     System.out.println("sid"+socialMediaDTO.getSid());
@@ -64,7 +67,7 @@ public class SocialMediaController {
                     }
                 }catch (Exception e){
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .body(new ResponseDTO(VarList.Internal_Server_Error,"Internal Server Error",socialMediaDTO));
+                            .body(new ResponseDTO(VarList.Internal_Server_Error,"Internal Server Error",e.getMessage()));
                 }
     }
 }

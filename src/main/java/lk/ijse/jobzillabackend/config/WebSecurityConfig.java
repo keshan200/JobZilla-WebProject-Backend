@@ -56,7 +56,8 @@ public class WebSecurityConfig {
                         .requestMatchers(
                                 "/api/v1/user/register",
                                 "/api/v1/auth/signIn",
-                                "/api/v1/auth/refreshToken"
+                                "/api/v1/auth/refreshToken",
+                                "/api/v1/qualification/save"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )

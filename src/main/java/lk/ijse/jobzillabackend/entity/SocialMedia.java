@@ -18,10 +18,10 @@ import java.util.UUID;
 public class SocialMedia implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "sid", columnDefinition = "VARCHAR(36)", unique = true, nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private UUID sid;
+    private int sid;
 
 
     private String platform;
