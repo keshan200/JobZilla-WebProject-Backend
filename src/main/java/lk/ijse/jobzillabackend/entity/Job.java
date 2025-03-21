@@ -9,6 +9,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -17,12 +18,10 @@ import java.util.UUID;
 @Entity
 public class Job implements Serializable {
 
-    /* @Column(name = "cid", columnDefinition = "VARCHAR(36)", unique = true, nullable = false)
-    @JdbcTypeCode(SqlTypes.VARCHAR)*/
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "VARCHAR(36)", nullable = false, unique = true)
+    @Column(columnDefinition = "VARCHAR(36)", unique = true, nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID jobId;
 
@@ -76,4 +75,7 @@ public class Job implements Serializable {
 
     @Column(nullable = false)
     private LocalDate endDate;
+
+    @ManyToMany(mappedBy = "job",cascade = CascadeType.ALL)
+    private List<Company> company;
 }

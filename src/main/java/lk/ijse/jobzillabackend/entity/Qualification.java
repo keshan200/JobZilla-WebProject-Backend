@@ -25,11 +25,19 @@ public class Qualification implements Serializable {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID qul_id;
 
-
+    @Column(nullable = false)
     private String qul_name;
+
+    @Column(nullable = false)
     private String university;
+
+    @Column(nullable = false)
     private String year;
     private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
+    @JoinColumn(name = "cand_id", referencedColumnName = "cand_id", nullable = false)
+    private Candidate candidate;
 
 
 }

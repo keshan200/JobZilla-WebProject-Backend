@@ -24,14 +24,15 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public int saveJob(JobDTO jobDTO) {
-        if (jobDTO.getJobId() == null) {
-            return VarList.Bad_Request;
-        }
-        if (jobRepository.existsById(jobDTO.getJobId())){
-            return VarList.Not_Acceptable;
-        }else {
-            jobRepository.save(modelMapper.map(jobDTO, Job.class));
-            return VarList.Created;
+        try {
+            if (jobDTO.getJobId() != null && jobRepository.existsById(jobDTO.getJobId())) {
+                return VarList.Not_Acceptable;
+            } else {
+                jobRepository.save(modelMapper.map(jobDTO, Job.class));
+                return VarList.Created;
+            }
+        } catch (Exception e) {
+            return VarList.Internal_Server_Error;
         }
     }
 }

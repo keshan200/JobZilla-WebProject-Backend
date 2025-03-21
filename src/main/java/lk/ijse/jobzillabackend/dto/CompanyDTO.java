@@ -51,5 +51,5 @@ public class CompanyDTO {
 
     private User user;
 
-    private List<SocialMedia> socialMediaProfiles;
+    private List<SocialMediaDTO> socialMediaProfiles;
 }

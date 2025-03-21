@@ -56,7 +56,6 @@ public class CandidateDTO {
 
     private User user;
 
-  /*  @NotNull(message = "Qualification list cannot be null")
-    private List<QualificationDTO> qualifications = new ArrayList<>();*/
+    private List<QualificationDTO> qualifications = new ArrayList<>();
 
 }

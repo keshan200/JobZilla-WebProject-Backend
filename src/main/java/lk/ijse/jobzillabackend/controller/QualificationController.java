@@ -9,10 +9,8 @@ import lk.ijse.jobzillabackend.service.QualificationService;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -30,9 +28,14 @@ public class QualificationController {
 
 
     @PostMapping("/save")
+    @PreAuthorize("hasAnyAuthority('CANDIDATE')")
     public ResponseEntity<ResponseDTO> addQualifications(@RequestBody @Valid QualificationDTO qualificationDTO) {
 
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.: " + qualificationDTO);
+
+        System.out.println("Qualification DTO: " + qualificationDTO);
+        System.out.println("Candidate ID: " + qualificationDTO.getCandidate().getCand_id());
+
         try {
             int response = qualificationService.saveQualification(qualificationDTO);
 
@@ -49,7 +52,7 @@ public class QualificationController {
                 }
                 case VarList.Bad_Request -> {
                     return ResponseEntity.status(VarList.Bad_Request)
-                            .body(new ResponseDTO(VarList.Bad_Request, "Invalid input data", qualificationDTO));
+                            .body(new ResponseDTO(VarList.Bad_Request, "error", qualificationDTO));
                 }
                 default -> {
                     return ResponseEntity.status(VarList.Internal_Server_Error)

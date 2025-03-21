@@ -19,7 +19,7 @@ public class JobDTO {
     private UUID jobId;
 
 
-/*    private String jobTitle;
+ /*   private String jobTitle;
     private String jobCategory;
     private String jobType;
     private String offeredSalary;
@@ -36,8 +36,8 @@ public class JobDTO {
     private String est_since;
     private String jobDescription;
     private LocalDate startDate;
-    private LocalDate endDate;*/
-
+    private LocalDate endDate;
+*/
     @NotBlank(message = "Job title is required")
     @Size(max = 100, message = "Job title must not exceed 100 characters")
     private String jobTitle;
@@ -105,6 +105,5 @@ public class JobDTO {
     @NotNull(message = "End date is required")
     @Future(message = "End date must be in the future")
     private LocalDate endDate;
-
 
 }

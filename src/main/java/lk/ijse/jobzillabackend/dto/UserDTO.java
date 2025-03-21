@@ -14,7 +14,6 @@ import java.util.UUID;
 @Data
 public class UserDTO{
 
-  /*  @JsonDeserialize(using = UUIDDeserializer.class)*/
     private UUID uid;
 
     @NotBlank(message = "email is required")
@@ -35,6 +34,9 @@ public class UserDTO{
     private String role;
 
     private Status status ;
+
+
+
 
 
 }

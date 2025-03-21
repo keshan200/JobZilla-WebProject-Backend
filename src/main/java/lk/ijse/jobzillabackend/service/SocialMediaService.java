@@ -10,5 +10,5 @@ public interface SocialMediaService {
     int saveSocialMedia(SocialMediaDTO socialMediaDTO);
     int updateSocialMedia(SocialMediaDTO socialMediaDTO);
     int deleteSocialMedia(int id);
-    List<UserDTO> getAll();
+    List<SocialMediaDTO> getAll();
 }

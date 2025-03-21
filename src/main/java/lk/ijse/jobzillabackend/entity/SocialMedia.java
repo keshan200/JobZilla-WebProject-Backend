@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
@@ -19,16 +20,12 @@ public class SocialMedia implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "sid", columnDefinition = "VARCHAR(36)", unique = true, nullable = false)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
     private int sid;
-
-
     private String platform;
     private String url;
 
     @ManyToOne
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_id",referencedColumnName = "cid", nullable = false)
     private Company company;
 
 }
