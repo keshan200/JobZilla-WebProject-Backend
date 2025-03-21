@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.User;
@@ -8,8 +9,11 @@ import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.CompanyService;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CompanyServiceImpl implements CompanyService{
@@ -40,21 +44,27 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     @Override
-    public Company updateCompany(CompanyDTO companyDto) {
+    public int updateCompany(CompanyDTO companyDto) {
+        if (companyDto.getCid() == null || !companyRepository.existsById(companyDto.getCid())) {
+            return VarList.Not_Found;
+        }
+
+        userRepository.findById(companyDto.getUser().getUid())
+                .orElseThrow(() -> new RuntimeException("User Account not found"));
+
         Company existingCompany = companyRepository.findById(companyDto.getCid())
-                .orElseThrow(() -> new RuntimeException("Company not found"));
+                .orElseThrow(() -> new RuntimeException("company not found"));
 
-        existingCompany.setLogo_img(companyDto.getLogo_img());
-        existingCompany.setBackground_img(companyDto.getBackground_img());
-        existingCompany.setCity(companyDto.getCity());
-        existingCompany.setCompany_name(companyDto.getCompany_name());
-        existingCompany.setCountry(companyDto.getCountry());
-        existingCompany.setDescription(companyDto.getDescription());
-        existingCompany.setEst_since(companyDto.getEst_since());
-        existingCompany.setFull_address(companyDto.getFull_address());
+        modelMapper.map(companyDto, existingCompany);
 
+        companyRepository.save(existingCompany);
+        return VarList.Created;
 
-        return companyRepository.save(existingCompany);
+    }
 
+    @Override
+    @Transactional
+    public List<CompanyDTO> getAllCompanies() {
+        return modelMapper.map(companyRepository.findAll(),new TypeToken<List<CompanyDTO>>(){}.getType());
     }
 }

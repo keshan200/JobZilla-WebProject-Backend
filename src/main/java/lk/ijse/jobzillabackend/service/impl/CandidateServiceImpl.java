@@ -2,12 +2,8 @@ package lk.ijse.jobzillabackend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CandidateDTO;
-import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Candidate;
-import lk.ijse.jobzillabackend.entity.Company;
-import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.repo.CandidateRepository;
-import lk.ijse.jobzillabackend.repo.CompanyRepository;
 import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.CandidateService;
 import lk.ijse.jobzillabackend.util.VarList;
