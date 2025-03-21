@@ -1,6 +1,7 @@
 package lk.ijse.jobzillabackend.service.impl;
 
 import lk.ijse.jobzillabackend.dto.QualificationDTO;
+import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.entity.Qualification;
 import lk.ijse.jobzillabackend.repo.QualificationRepository;
 import lk.ijse.jobzillabackend.service.QualificationService;
@@ -23,15 +24,15 @@ public class QualificationServiceImpl implements QualificationService {
 
     @Override
     public int saveQualification(QualificationDTO qualificationDTO) {
-        if (qualificationDTO.getQul_id() == null || qualificationDTO.getQul_name().isEmpty()) {
-            return VarList.Bad_Request;
-        }
-
-        if (qualificationRepository.existsById(qualificationDTO.getQul_id())){
-            return VarList.Not_Acceptable;
-        }else {
-            qualificationRepository.save(modelMapper.map(qualificationDTO, Qualification.class));
-            return VarList.Created;
+        try {
+            if (qualificationDTO.getQul_id() != null && qualificationRepository.existsById(qualificationDTO.getQul_id())) {
+                return VarList.Not_Acceptable;
+            } else {
+                qualificationRepository.save(modelMapper.map(qualificationDTO, Qualification.class));
+                return VarList.Created;
+            }
+        } catch (Exception e) {
+            return VarList.Internal_Server_Error;
         }
     }
 }
