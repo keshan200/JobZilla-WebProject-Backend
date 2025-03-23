@@ -9,6 +9,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,8 +43,10 @@ public class Company implements Serializable {
     @Column(nullable = false)
     private String Logo_img;
 
-    @Column(nullable = false)
     private String background_img;
+
+    @ElementCollection
+    private List<String> image_collection = new ArrayList<>();
 
     @Column(nullable = false)
     private String est_since;
@@ -52,7 +55,7 @@ public class Company implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = false,fetch = FetchType.EAGER)
     private List<SocialMedia> socialMediaProfiles;
 
     @ManyToMany

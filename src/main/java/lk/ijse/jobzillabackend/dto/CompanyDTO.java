@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,15 +42,14 @@ public class CompanyDTO {
 
     private String logo_img;
 
-
     private String background_img;
+
+    private List<String> image_collection = new ArrayList<>();
 
 
     @Pattern(regexp = "\\d{4}", message = "Establishment year must be a 4-digit number")
     private String est_since;
 
-
     private User user;
-
     private List<SocialMediaDTO> socialMediaProfiles;
 }
