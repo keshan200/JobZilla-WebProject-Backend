@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CandidateService {
     int saveCandidate(CandidateDTO candidateDTO, MultipartFile file);
-    int updateCandidate(CandidateDTO candidateDTO);
+    int updateCandidate(CandidateDTO candidateDTO,MultipartFile file);
     int deleteCandidate(String id);
     List<CandidateDTO> getAll();
 }

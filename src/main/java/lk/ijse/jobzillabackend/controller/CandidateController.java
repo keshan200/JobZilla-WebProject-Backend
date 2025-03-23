@@ -81,15 +81,15 @@ public class CandidateController {
             switch (result) {
                 case VarList.Created -> {
                     return ResponseEntity.status(HttpStatus.CREATED)
-                            .body(new ResponseDTO(201, "Candidate created successfully", candidateDTO));
+                            .body(new ResponseDTO(VarList.Created, "Candidate created successfully", candidateDTO));
                 }
                 case VarList.Not_Acceptable -> {
                     return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                            .body(new ResponseDTO(406, "Candidate already exists", null));
+                            .body(new ResponseDTO(VarList.Not_Acceptable, "Candidate already exists", null));
                 }
                 default -> {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ResponseDTO(400, "Error saving candidate", null));
+                            .body(new ResponseDTO(VarList.Bad_Request, "Error saving candidate", null));
                 }
             }
 
@@ -103,38 +103,38 @@ public class CandidateController {
 
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('CANDIDATE','ADMIN')")
-    public ResponseEntity<ResponseDTO>updateCandidate(@RequestBody @Valid CandidateDTO candidateDTO){
+    public ResponseEntity<ResponseDTO>updateCandidate(
+            @RequestPart("candidate") @Valid String candidateDTO,
+            @RequestPart(value = "file", required = false) MultipartFile file){
+            try {
 
-        try{
+                ObjectMapper objectMapper = new ObjectMapper();
+                CandidateDTO candidateDTO2 = objectMapper.readValue(candidateDTO, CandidateDTO.class);
+                int res = candidateService.updateCandidate(candidateDTO2, file);
 
-            int res = candidateService.updateCandidate(candidateDTO);
+                System.out.println("Parsed CandidateDTO: " + candidateDTO2);
+                switch (res) {
+                    case VarList.Created -> {
+                        return ResponseEntity.status(HttpStatus.OK)
+                                .body(new ResponseDTO(VarList.Created, "Candidate updated successfully", candidateDTO));
+                    }
 
-            switch (res) {
-                case VarList.Created -> {
-                    return ResponseEntity.status(HttpStatus.CREATED)
-                            .body(new ResponseDTO(VarList.Created, "success", candidateDTO));
+                    case VarList.Not_Found -> {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body(new ResponseDTO(VarList.Not_Found, "Candidate not found", candidateDTO));
+                    }
+
+                    default -> {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body(new ResponseDTO(VarList.Bad_Request, "Update failed", candidateDTO));
+                    }
                 }
-
-                case VarList.Not_Acceptable -> {
-                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
-                            .body(new ResponseDTO(VarList.Not_Acceptable, "url already added!!!", candidateDTO));
-                }
-
-                case VarList.Not_Found -> {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                            .body(new ResponseDTO(VarList.Not_Found, "url not found!!!", candidateDTO));
-                }
-
-                default -> {
-                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                            .body(new ResponseDTO(VarList.Bad_Gateway, "Error", candidateDTO));
-                }
-             }
 
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ResponseDTO(VarList.Internal_Server_Error,"Internal Server Error",candidateDTO));
-        }
+                        .body(new ResponseDTO(VarList.Internal_Server_Error, "Internal Server Error", e.getMessage()));
+            }
+
     }
 
 

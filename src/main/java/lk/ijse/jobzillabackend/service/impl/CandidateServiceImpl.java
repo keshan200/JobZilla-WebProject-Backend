@@ -71,19 +71,27 @@ public class CandidateServiceImpl implements CandidateService {
 
 
     @Override
-    public int updateCandidate(CandidateDTO candidateDTO) {
+    public int updateCandidate(CandidateDTO candidateDTO, MultipartFile file) {
+
         if (candidateDTO.getCand_id() == null || !candidateRepository.existsById(candidateDTO.getCand_id())) {
             return VarList.Not_Found;
         }
 
         userRepository.findById(candidateDTO.getUser().getUid())
-                .orElseThrow(() -> new RuntimeException("User Account not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Candidate existingCandidate = candidateRepository.findById(candidateDTO.getCand_id())
-                .orElseThrow(() -> new RuntimeException("Candidate not found"));
+        Candidate existingCandidate = modelMapper.map(candidateDTO, Candidate.class);
 
-        modelMapper.map(candidateDTO, existingCandidate);
-
+        if (file != null && !file.isEmpty()) {
+            try {
+                String fileName = candidateDTO.getUser().getUid() + "_" + file.getOriginalFilename();
+                String uploadDir = "candidates/" + candidateDTO.getUser().getUid();
+                FileUploadUtil.saveFile(uploadDir, fileName, file);
+                existingCandidate.setImg("uploads/" + uploadDir + "/" + fileName);
+            } catch (IOException e) {
+                throw new RuntimeException("File saving failed: " + e.getMessage());
+            }
+        }
         candidateRepository.save(existingCandidate);
         return VarList.Created;
     }
