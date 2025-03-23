@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Qualification;
 import lk.ijse.jobzillabackend.entity.User;
 import lombok.AllArgsConstructor;
@@ -57,5 +58,7 @@ public class CandidateDTO {
     private User user;
 
     private List<QualificationDTO> qualifications = new ArrayList<>();
+
+    private List<Application> applications;
 
 }

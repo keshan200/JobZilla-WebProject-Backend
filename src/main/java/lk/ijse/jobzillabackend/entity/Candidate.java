@@ -56,10 +56,14 @@ public class Candidate implements Serializable {
     @ElementCollection
     private List<String> skills = new ArrayList<>();
 
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
 
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Qualification> qualifications = new ArrayList<>();
+
+    @ManyToMany
+    private List<Application> applications;
 }

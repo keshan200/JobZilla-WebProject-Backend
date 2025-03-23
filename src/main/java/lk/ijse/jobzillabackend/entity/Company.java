@@ -51,6 +51,8 @@ public class Company implements Serializable {
     @Column(nullable = false)
     private String est_since;
 
+
+
     @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
@@ -60,6 +62,9 @@ public class Company implements Serializable {
 
     @ManyToMany
     private List<Job>job;
+
+    @ManyToMany
+    private List<Application> applications;
 
 
 }
