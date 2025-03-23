@@ -59,7 +59,10 @@ public class WebSecurityConfig {
                                 "/api/v1/auth/refreshToken",
                                 "/api/v1/job/save",
                                 "/api/v1/job/update",
-                                "/api/v1/job/getAll"
+                                "/api/v1/job/getAll",
+                                "/api/v1/png/upload",
+                                "/api/v1/auth/validate",
+                                "/api/v1/img/uploads"
                                 ).permitAll()
                         .anyRequest().authenticated()
                 )

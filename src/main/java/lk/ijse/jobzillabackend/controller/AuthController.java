@@ -16,15 +16,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("api/v1/auth")
+@CrossOrigin(origins = "http://localhost:63342")
 public class AuthController {
 
 
@@ -33,14 +32,16 @@ public class AuthController {
     private final UserServiceImpl userService;
     private final ResponseDTO responseDTO;
     private final PasswordEncoder passwordEncoder;
+    private final UserDetailsService userDetailsService;
 
 
-    public AuthController(JwtUtil jwtUtil, AuthenticationManager authenticationManager, UserServiceImpl userService, ResponseDTO responseDTO, PasswordEncoder passwordEncoder) {
+    public AuthController(JwtUtil jwtUtil, AuthenticationManager authenticationManager, UserServiceImpl userService, ResponseDTO responseDTO, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
         this.userService = userService;
         this.responseDTO = responseDTO;
         this.passwordEncoder = passwordEncoder;
+        this.userDetailsService = userDetailsService;
     }
 
 
@@ -130,6 +131,26 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseDTO(VarList.Internal_Server_Error, "Error refreshing token", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/api/v1/validate")
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
+        try {
+
+            if (token.startsWith("Bearer ")) {
+                token = token.substring(7);
+            }
+            String username = jwtUtil.getUsernameFromToken(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            if (jwtUtil.validateToken(token, userDetails)) {
+                return ResponseEntity.ok("Token is valid.");
+            } else {
+                return ResponseEntity.status(401).body("Invalid or expired token.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Token validation failed: " + e.getMessage());
         }
     }
 
