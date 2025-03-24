@@ -1,6 +1,7 @@
 package lk.ijse.jobzillabackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -60,8 +59,13 @@ public class Company implements Serializable {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = false,fetch = FetchType.EAGER)
     private List<SocialMedia> socialMediaProfiles;
 
-    @ManyToMany
-    private List<Job>job;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "company_job",
+            joinColumns = @JoinColumn(name = "company_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id")
+    )
+    private List<Job> jobs;
 
     @ManyToMany
     private List<Application> applications;

@@ -1,5 +1,7 @@
 package lk.ijse.jobzillabackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +11,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -76,6 +77,6 @@ public class Job implements Serializable {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @ManyToMany(mappedBy = "job",cascade = CascadeType.ALL)
-    private List<Company> company;
+    @ManyToMany(mappedBy = "jobs", fetch = FetchType.LAZY)
+    private List<Company> companies;
 }

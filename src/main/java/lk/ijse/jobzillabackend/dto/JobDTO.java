@@ -3,12 +3,17 @@ package lk.ijse.jobzillabackend.dto;
 
 import jakarta.validation.constraints.*;
 import jdk.jfr.Category;
+import lk.ijse.jobzillabackend.entity.Company;
+import lk.ijse.jobzillabackend.entity.Job;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -18,26 +23,6 @@ public class JobDTO {
 
     private UUID jobId;
 
-
- /*   private String jobTitle;
-    private String jobCategory;
-    private String jobType;
-    private String offeredSalary;
-    private String experience;
-    private String qualification;
-    private String gender;
-    private String country;
-    private String city;
-    private String location;
-    private String latitude;
-    private String longitude;
-    private String email;
-    private String website;
-    private String est_since;
-    private String jobDescription;
-    private LocalDate startDate;
-    private LocalDate endDate;
-*/
     @NotBlank(message = "Job title is required")
     @Size(max = 100, message = "Job title must not exceed 100 characters")
     private String jobTitle;
@@ -105,5 +90,7 @@ public class JobDTO {
     @NotNull(message = "End date is required")
     @Future(message = "End date must be in the future")
     private LocalDate endDate;
+
+    private List<Company> companies;
 
 }

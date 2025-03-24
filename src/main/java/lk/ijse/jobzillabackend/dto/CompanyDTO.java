@@ -2,15 +2,14 @@ package lk.ijse.jobzillabackend.dto;
 
 import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.Application;
+import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.entity.SocialMedia;
 import lk.ijse.jobzillabackend.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -52,6 +51,10 @@ public class CompanyDTO {
     private String est_since;
 
     private User user;
+
     private List<SocialMediaDTO> socialMediaProfiles;
+
     private List<Application> applications;
+
+    private List<Job> jobs;
 }

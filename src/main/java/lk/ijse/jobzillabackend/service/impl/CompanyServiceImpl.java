@@ -2,10 +2,10 @@ package lk.ijse.jobzillabackend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
-import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
-import lk.ijse.jobzillabackend.entity.User;
+import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.repo.CompanyRepository;
+import lk.ijse.jobzillabackend.repo.JobRepository;
 import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.CompanyService;
 import lk.ijse.jobzillabackend.util.FileUploadUtil;
@@ -17,9 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CompanyServiceImpl implements CompanyService{
@@ -29,6 +27,9 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -145,4 +146,7 @@ public class CompanyServiceImpl implements CompanyService{
     public List<CompanyDTO> getAllCompanies() {
         return modelMapper.map(companyRepository.findAll(),new TypeToken<List<CompanyDTO>>(){}.getType());
     }
+
+
+
 }
