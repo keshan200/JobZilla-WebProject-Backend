@@ -10,9 +10,13 @@ import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -119,6 +123,19 @@ public class UserController {
         }
 
     }
+
+
+    @GetMapping("/logged-user")
+    @PreAuthorize("hasAnyAuthority('EMPLOYER')")
+    public ResponseEntity<?> getLoggedInUserId(Authentication authentication) {
+        UserDTO userDetails = (UserDTO) authentication.getPrincipal();
+        UUID loggedInUserId = userDetails.getUid();
+
+        System.out.println("?????"+loggedInUserId);
+
+        return ResponseEntity.ok(loggedInUserId);
+    }
+
 
 
 

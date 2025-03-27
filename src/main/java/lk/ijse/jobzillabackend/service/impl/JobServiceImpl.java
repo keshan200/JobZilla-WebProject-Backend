@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @Service
@@ -62,5 +63,14 @@ public class JobServiceImpl implements JobService {
     @Override
     public List<JobDTO> getAllJobs() {
         return modelMapper.map(jobRepository.findAll(),new TypeToken<List<JobDTO>>(){}.getType());
+    }
+
+
+    public Job getJobWithCompanies(UUID jobId) {
+        Job job = jobRepository.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+        job.getCompanies().size();
+
+        return job;
     }
 }

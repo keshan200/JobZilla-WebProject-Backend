@@ -7,7 +7,10 @@ import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.dto.SocialMediaDTO;
+import lk.ijse.jobzillabackend.entity.Job;
+import lk.ijse.jobzillabackend.service.JobPostService;
 import lk.ijse.jobzillabackend.service.JobService;
+import lk.ijse.jobzillabackend.service.impl.JobServiceImpl;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +18,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/job")
+@CrossOrigin(origins = "http://localhost:63342")
 
 public class JobController {
 
     private final JobService jobService;
 
-    public JobController(JobService jobService) {
+    private final JobServiceImpl jobServiceImpl;
+
+    public JobController(JobService jobService, JobServiceImpl jobServiceImpl) {
         this.jobService = jobService;
+        this.jobServiceImpl = jobServiceImpl;
     }
 
 
@@ -114,5 +122,12 @@ public class JobController {
             throw new RuntimeException(e);
         }
 
+    }
+
+
+    // Endpoint to get job with companies
+    @GetMapping("/{jobId}")
+    public Job getJobWithCompanies(@PathVariable UUID jobId) {
+        return jobServiceImpl.getJobWithCompanies(jobId);
     }
 }

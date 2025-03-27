@@ -1,17 +1,19 @@
 package lk.ijse.jobzillabackend.dto;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
+import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.enums.ApplicationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,12 +39,16 @@ public class ApplicationDTO{
     @NotBlank(message = "Resume path cannot be empty")
     private String resume;
 
+    @NotNull(message = "Date cannot be null")
+    private String date;
+
     private ApplicationStatus status;
 
 
-    private List<Company> companies;
+    private Job job;
 
-    private List<Candidate> candidates;
+    private Candidate candidate;
+
 
 
 

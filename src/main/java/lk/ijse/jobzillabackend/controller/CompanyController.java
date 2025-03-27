@@ -15,6 +15,7 @@ import lk.ijse.jobzillabackend.service.UserService;
 import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/company")
+@CrossOrigin(origins = "http://localhost:63342")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -38,8 +40,8 @@ public class CompanyController {
     }
 
 
-    @PostMapping("/register")
-    @PreAuthorize("hasAnyAuthority('EMPLOYER')")
+
+    @PostMapping(value = "/register" ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<ResponseDTO> registerCompany(
             @RequestPart("company") @Valid String companyData,
             @RequestPart("files") List<MultipartFile> files) {
@@ -48,8 +50,8 @@ public class CompanyController {
             ObjectMapper objectMapper = new ObjectMapper();
             CompanyDTO companyDTO = objectMapper.readValue(companyData, CompanyDTO.class);
 
-            int result = companyService.saveCompany(companyDTO, files);
 
+            int result = companyService.saveCompany(companyDTO, files);
 
             switch (result) {
                 case VarList.Created -> {

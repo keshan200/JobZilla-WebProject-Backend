@@ -77,6 +77,9 @@ public class Job implements Serializable {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @ManyToMany(mappedBy = "jobs", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "jobs")
     private List<Company> companies;
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private List<Application> applications;
 }

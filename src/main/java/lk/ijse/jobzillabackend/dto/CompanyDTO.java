@@ -39,6 +39,10 @@ public class CompanyDTO {
     @Size(max = 500, message = "Description cannot exceed 500 characters  ")
     private String description;
 
+    @Pattern(regexp = "^(http|https)://.*$", message = "Website must be a valid URL")
+    private String website;
+
+
 
     private String logo_img;
 
@@ -46,11 +50,10 @@ public class CompanyDTO {
 
     private List<String> image_collection = new ArrayList<>();
 
-
     @Pattern(regexp = "\\d{4}", message = "Establishment year must be a 4-digit number")
     private String est_since;
 
-    private User user;
+    private UserDTO user;
 
     private List<SocialMediaDTO> socialMediaProfiles;
 

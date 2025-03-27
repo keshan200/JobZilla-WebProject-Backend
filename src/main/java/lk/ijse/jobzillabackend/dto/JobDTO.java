@@ -3,6 +3,7 @@ package lk.ijse.jobzillabackend.dto;
 
 import jakarta.validation.constraints.*;
 import jdk.jfr.Category;
+import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
 import lombok.AllArgsConstructor;
@@ -92,5 +93,7 @@ public class JobDTO {
     private LocalDate endDate;
 
     private List<Company> companies;
+
+    private List<Application> applications;
 
 }

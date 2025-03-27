@@ -39,6 +39,8 @@ public class Company implements Serializable {
     @Column(nullable = false)
     private String description;
 
+    private String website;
+
     @Column(nullable = false)
     private String Logo_img;
 

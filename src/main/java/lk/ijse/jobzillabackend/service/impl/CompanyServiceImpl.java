@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
+import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.repo.CompanyRepository;
@@ -13,6 +14,7 @@ import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -145,6 +147,13 @@ public class CompanyServiceImpl implements CompanyService{
     @Transactional
     public List<CompanyDTO> getAllCompanies() {
         return modelMapper.map(companyRepository.findAll(),new TypeToken<List<CompanyDTO>>(){}.getType());
+    }
+
+
+    @Override
+    public UUID getLoggedInUserId(Authentication authentication) {
+        UserDTO userDetailsID = (UserDTO) authentication.getPrincipal();
+        return userDetailsID.getUid();
     }
 
 

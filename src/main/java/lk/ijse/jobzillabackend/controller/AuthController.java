@@ -78,6 +78,7 @@ public class AuthController {
         AuthDTO authDTO = new AuthDTO();
         authDTO.setEmail(user.getEmail());
         authDTO.setToken(token);
+        authDTO.setId(user.getUid());
         authDTO.setRefreshToken(refreshToken);
 
         return ResponseEntity.status(HttpStatus.CREATED)

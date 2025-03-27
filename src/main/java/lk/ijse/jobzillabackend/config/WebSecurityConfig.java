@@ -52,6 +52,7 @@ public class WebSecurityConfig {
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors().and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/v1/user/register",
@@ -62,9 +63,13 @@ public class WebSecurityConfig {
                                 "/api/v1/job/getAll",
                                 "/api/v1/png/upload",
                                 "/api/v1/auth/validate",
-                                "/api/v1/img/uploads"
+                                "/api/v1/img/uploads",
+                                "/api/v1/application/getAll"
                                 ).permitAll()
+                        .requestMatchers("/api/v1/company/register").hasAuthority("EMPLOYER")
                         .anyRequest().authenticated()
+
+
                 )
 
 

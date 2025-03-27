@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -53,7 +54,7 @@ public class Candidate implements Serializable {
     @Column(nullable = false)
     private String description;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> skills = new ArrayList<>();
 
 
@@ -64,6 +65,6 @@ public class Candidate implements Serializable {
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Qualification> qualifications = new ArrayList<>();
 
-    @ManyToMany
+    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
     private List<Application> applications;
 }
