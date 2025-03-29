@@ -54,11 +54,6 @@ public class Job implements Serializable {
     @Column(nullable = false)
     private String location;
 
-    @Column(nullable = false)
-    private String latitude;
-
-    @Column(nullable = false)
-    private String longitude;
 
     @Column(nullable = false)
     private String email;
@@ -72,14 +67,20 @@ public class Job implements Serializable {
     private String jobDescription;
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private String fulladdress;
 
     @Column(nullable = false)
-    private LocalDate endDate;
+    private String startDate;
 
-    @ManyToMany(mappedBy = "jobs")
-    private List<Company> companies;
+    @Column(nullable = false)
+    private String endDate;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+
+    @ManyToOne
+    @JoinColumn(name = "company_id", referencedColumnName = "cid", nullable = false)
+    @JsonIgnore
+    private Company company;
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Application> applications;
 }

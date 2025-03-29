@@ -14,7 +14,5 @@ public interface CompanyService {
     int saveCompany(CompanyDTO companyDto, List<MultipartFile> files);
     int updateCompany(CompanyDTO companyDto, List<MultipartFile> files);
     List<CompanyDTO> getAllCompanies();
-    UUID getLoggedInUserId(Authentication authentication);
-
-
+    List<CompanyDTO>getCompanyByUserID(UUID userId);
 }

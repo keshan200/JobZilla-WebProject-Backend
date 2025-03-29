@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImpl implements CompanyService{
@@ -151,11 +152,13 @@ public class CompanyServiceImpl implements CompanyService{
 
 
     @Override
-    public UUID getLoggedInUserId(Authentication authentication) {
-        UserDTO userDetailsID = (UserDTO) authentication.getPrincipal();
-        return userDetailsID.getUid();
+    @Transactional
+    public List<CompanyDTO> getCompanyByUserID(UUID userId) {
+        Optional<Company> companies = companyRepository.findByUserId(userId);
+        return companies.stream()
+                .map(company -> modelMapper.map(company, CompanyDTO.class))
+                .toList();
     }
-
 
 
 }

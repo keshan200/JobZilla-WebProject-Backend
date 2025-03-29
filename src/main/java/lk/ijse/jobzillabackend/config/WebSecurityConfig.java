@@ -58,15 +58,22 @@ public class WebSecurityConfig {
                                 "/api/v1/user/register",
                                 "/api/v1/auth/signIn",
                                 "/api/v1/auth/refreshToken",
-                                "/api/v1/job/save",
-                                "/api/v1/job/update",
                                 "/api/v1/job/getAll",
                                 "/api/v1/png/upload",
                                 "/api/v1/auth/validate",
                                 "/api/v1/img/uploads",
                                 "/api/v1/application/getAll"
                                 ).permitAll()
-                        .requestMatchers("/api/v1/company/register").hasAuthority("EMPLOYER")
+
+
+                        .requestMatchers(
+                                         "/api/v1/company/register",
+                                         "/api/v1/company/user/{userId}"
+                                         ).hasAuthority("EMPLOYER")
+
+
+
+                        .requestMatchers("/api/v1/job/save","/api/v1/job/post-job").hasAuthority("EMPLOYER")
                         .anyRequest().authenticated()
 
 

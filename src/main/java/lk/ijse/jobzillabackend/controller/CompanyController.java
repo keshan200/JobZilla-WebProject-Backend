@@ -164,6 +164,22 @@ public class CompanyController {
 
     }
 
+
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CompanyDTO>> getCompanyByUserID(@PathVariable UUID userId) {
+
+        List<CompanyDTO> companyDTOs = companyService.getCompanyByUserID(userId);
+        if (companyDTOs.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(companyDTOs);
+    }
+
+
 }
+
+
 
 

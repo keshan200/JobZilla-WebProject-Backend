@@ -77,9 +77,12 @@ public class AuthController {
 
         AuthDTO authDTO = new AuthDTO();
         authDTO.setEmail(user.getEmail());
+        authDTO.setRole(user.getRole());
         authDTO.setToken(token);
         authDTO.setId(user.getUid());
         authDTO.setRefreshToken(refreshToken);
+
+        System.out.println(authDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ResponseDTO(VarList.Created, "Success", authDTO));

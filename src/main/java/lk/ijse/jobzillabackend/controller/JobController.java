@@ -2,19 +2,15 @@ package lk.ijse.jobzillabackend.controller;
 
 
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
-import lk.ijse.jobzillabackend.dto.SocialMediaDTO;
 import lk.ijse.jobzillabackend.entity.Job;
-import lk.ijse.jobzillabackend.service.JobPostService;
 import lk.ijse.jobzillabackend.service.JobService;
 import lk.ijse.jobzillabackend.service.impl.JobServiceImpl;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,7 +34,6 @@ public class JobController {
 
 
     @PostMapping("/save")
-    /*@PreAuthorize("hasAnyAuthority('EMPLOYER')")*/
     public ResponseEntity<ResponseDTO>saveJob(@RequestBody @Valid JobDTO jobDTO) {
 
 
@@ -76,9 +71,8 @@ public class JobController {
         }
 
 
-
-        @PutMapping("/update")
-        public ResponseEntity<ResponseDTO>updateJob(@RequestBody @Valid JobDTO jobDTO) {
+    @PutMapping("/update")
+     public ResponseEntity<ResponseDTO>updateJob(@RequestBody @Valid JobDTO jobDTO) {
 
             try {
                 int res = jobService.updateJob(jobDTO);
@@ -125,9 +119,16 @@ public class JobController {
     }
 
 
-    // Endpoint to get job with companies
-    @GetMapping("/{jobId}")
-    public Job getJobWithCompanies(@PathVariable UUID jobId) {
-        return jobServiceImpl.getJobWithCompanies(jobId);
+    @GetMapping("jobById/{userId}")
+    public ResponseEntity<List<JobDTO>> getJobsByUserId(@PathVariable UUID userId) {
+        List<JobDTO> jobDTOs = jobService.getJobsByUserId(userId);
+        if (jobDTOs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(jobDTOs);
+        }
+
+        return ResponseEntity.ok(jobDTOs);
     }
+
+
 }
