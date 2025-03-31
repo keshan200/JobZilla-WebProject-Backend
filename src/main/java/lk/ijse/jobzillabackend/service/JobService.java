@@ -14,5 +14,5 @@ public interface JobService {
     int deleteJob(int id);
     List<JobDTO> getAllJobs();
 
-    List<JobDTO> getJobsByUserId(UUID userId);
+    List<JobDTO> getJobsByUserId(UUID companyId);
 }

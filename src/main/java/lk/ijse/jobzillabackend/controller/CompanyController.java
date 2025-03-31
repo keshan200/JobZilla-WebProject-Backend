@@ -11,7 +11,6 @@ import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.CompanyService;
-import lk.ijse.jobzillabackend.service.UserService;
 import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
@@ -112,7 +111,6 @@ public class CompanyController {
 
 
     @PutMapping("/update")
-    @PreAuthorize("hasAnyAuthority('EMPLOYER','ADMIN')")
     public ResponseEntity<ResponseDTO> updateCompany(
             @RequestPart("company") @Valid String companyData,
             @RequestPart(value = "files", required = false) List<MultipartFile> files) {
@@ -152,12 +150,10 @@ public class CompanyController {
 
 
     @GetMapping(value = "getAll")
-    @PreAuthorize("hasAnyAuthority('EMPLOYER','ADMIN')")
     public List<CompanyDTO> getAllUsers() {
 
         try {
             return companyService.getAllCompanies();
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -169,13 +165,26 @@ public class CompanyController {
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<CompanyDTO>> getCompanyByUserID(@PathVariable UUID userId) {
-
         List<CompanyDTO> companyDTOs = companyService.getCompanyByUserID(userId);
         if (companyDTOs.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(companyDTOs);
     }
+
+
+    @GetMapping("/all/{cid}")
+    public ResponseEntity<List<CompanyDTO>> getAllCompaniesBycId(@PathVariable  UUID cid) {
+        List<CompanyDTO> companies = companyService.getCompaniesByCid(cid);
+
+        System.out.println(">>>>>>>>>>>>>>"+companies);
+        if (companies.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(companies);
+        }
+    }
+
 
 
 }

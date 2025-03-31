@@ -3,8 +3,6 @@ package lk.ijse.jobzillabackend.dto;
 import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Job;
-import lk.ijse.jobzillabackend.entity.SocialMedia;
-import lk.ijse.jobzillabackend.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +39,6 @@ public class CompanyDTO {
 
     @Pattern(regexp = "^(http|https)://.*$", message = "Website must be a valid URL")
     private String website;
-
 
 
     private String logo_img;

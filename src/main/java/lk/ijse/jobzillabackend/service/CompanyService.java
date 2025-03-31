@@ -15,4 +15,5 @@ public interface CompanyService {
     int updateCompany(CompanyDTO companyDto, List<MultipartFile> files);
     List<CompanyDTO> getAllCompanies();
     List<CompanyDTO>getCompanyByUserID(UUID userId);
+     List<CompanyDTO> getCompaniesByCid(UUID cid);
 }

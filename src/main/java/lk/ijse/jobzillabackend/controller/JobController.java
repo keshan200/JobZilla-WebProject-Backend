@@ -3,6 +3,7 @@ package lk.ijse.jobzillabackend.controller;
 
 
 import jakarta.validation.Valid;
+import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.entity.Job;
@@ -119,15 +120,16 @@ public class JobController {
     }
 
 
-    @GetMapping("jobById/{userId}")
-    public ResponseEntity<List<JobDTO>> getJobsByUserId(@PathVariable UUID userId) {
-        List<JobDTO> jobDTOs = jobService.getJobsByUserId(userId);
-        if (jobDTOs.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(jobDTOs);
-        }
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<JobDTO>> getJobsByCompanyId(@PathVariable UUID companyId) {
 
-        return ResponseEntity.ok(jobDTOs);
+        List<JobDTO> jobDtos = jobService.getJobsByUserId(companyId);
+        System.out.println(">>>>>>>>>>>>>"+jobDtos);
+
+        if (jobDtos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(jobDtos);
     }
 
 

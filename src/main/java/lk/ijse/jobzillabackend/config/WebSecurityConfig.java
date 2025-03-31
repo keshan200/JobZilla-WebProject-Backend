@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebSecurity
 @Configuration
@@ -59,17 +61,23 @@ public class WebSecurityConfig {
                                 "/api/v1/auth/signIn",
                                 "/api/v1/auth/refreshToken",
                                 "/api/v1/job/getAll",
+                                "/api/v1/company/getAll",
                                 "/api/v1/png/upload",
                                 "/api/v1/auth/validate",
                                 "/api/v1/img/uploads",
-                                "/api/v1/application/getAll"
-                                ).permitAll()
+                                "/api/v1/application/getAll",
+                                "/uploads/**",
+                                "/api/v1/company/all/{cid}"
+                        ).permitAll()
+
 
 
                         .requestMatchers(
                                          "/api/v1/company/register",
-                                         "/api/v1/company/user/{userId}"
+                                         "/api/v1/company/user/{userId}",
+                                         "/api/v1/job/company/{companyId}"
                                          ).hasAuthority("EMPLOYER")
+
 
 
 
@@ -86,7 +94,11 @@ public class WebSecurityConfig {
     }
 
 
+
+
 }
+
+
 
 
 /*"api/v1/company/register",

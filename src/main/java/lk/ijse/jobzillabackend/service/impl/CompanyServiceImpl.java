@@ -56,9 +56,9 @@ public class CompanyServiceImpl implements CompanyService{
                     MultipartFile file = files.get(i);
                     if (file != null && !file.isEmpty()) {
                         String fileName = companyDto.getUser().getUid() + "_" + file.getOriginalFilename();
-                        String uploadDir = "company/" + companyDto.getUser().getUid();
+                        String uploadDir = "company/";
                         FileUploadUtil.saveFile(uploadDir, fileName, file);
-                        String filePath = "uploads/" + uploadDir + "/" + fileName;
+                        String filePath = uploadDir  + fileName;
                         imagePaths.add(filePath);
 
                         if (i == 0) {
@@ -147,7 +147,13 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     @Transactional
     public List<CompanyDTO> getAllCompanies() {
-        return modelMapper.map(companyRepository.findAll(),new TypeToken<List<CompanyDTO>>(){}.getType());
+        List<Company> companies = companyRepository.findAll();
+
+        return companies.stream().map(company -> {
+            CompanyDTO dto = modelMapper.map(company, CompanyDTO.class);
+            dto.setLogo_img("http://localhost:8080/uploads/" + company.getLogo_img());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 
@@ -158,6 +164,22 @@ public class CompanyServiceImpl implements CompanyService{
         return companies.stream()
                 .map(company -> modelMapper.map(company, CompanyDTO.class))
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<CompanyDTO> getCompaniesByCid(UUID cid) {
+        Optional<Company> companies = companyRepository.findByCid(cid);
+
+        System.out.println("coma"+companies);
+        return companies
+                .map(company -> {
+                    if (company.getUser() == null) {
+                        throw new IllegalStateException("User is null for company " + company.getCid());
+                    }
+                    return Collections.singletonList(modelMapper.map(company, CompanyDTO.class));
+                })
+                .orElseGet(Collections::emptyList);
     }
 
 

@@ -1,5 +1,7 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import jakarta.transaction.Transactional;
+import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Company;
@@ -76,16 +78,28 @@ public class JobServiceImpl implements JobService {
     }
 
 
-    @Override
-    public List<JobDTO> getJobsByUserId(UUID userId) {
-        List<Job> jobs = jobRepository.findAllJobsByUserId(userId);
-        if (jobs.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "මෙම පරිශීලක අංකය සඳහා රැකියා නොමැත");
-        }
-        return jobs.stream()
-                .map(job -> modelMapper.map(job, JobDTO.class))
-                .collect(Collectors.toList());
-    }
+/*    @Override
+    @Transactional
+    public List<JobDTO> getJobsByUserId(UUID companyId) {
+        List<Job> jobs = jobRepository.findAllJobsByCompanyId(companyId);
 
+        System.out.println("jobdto"+jobs);
+        return jobs.stream()
+                .map(Job -> modelMapper.map(Job, JobDTO.class))
+                .toList();
+    }*/
+
+    @Override
+    @Transactional
+    public List<JobDTO> getJobsByUserId(UUID companyId) {
+        List<Job> jobs = jobRepository.findAllJobsByCompanyId(companyId);
+        ModelMapper customMapper = new ModelMapper();
+        customMapper.typeMap(Job.class, JobDTO.class)
+                .addMappings(mapper -> mapper.skip(JobDTO::setCompany));
+
+        return jobs.stream()
+                .map(job -> customMapper.map(job, JobDTO.class))
+                .toList();
+    }
 
 }

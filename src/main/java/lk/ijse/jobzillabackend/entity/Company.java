@@ -1,6 +1,7 @@
 package lk.ijse.jobzillabackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -54,7 +55,7 @@ public class Company implements Serializable {
 
 
 
-    @OneToOne
+    @OneToOne()
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
 
@@ -62,10 +63,14 @@ public class Company implements Serializable {
     private List<SocialMedia> socialMediaProfiles;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Job> jobs;
 
     @ManyToMany
+    @JsonIgnore
     private List<Application> applications;
+
+
 
 
 }
