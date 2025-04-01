@@ -72,22 +72,15 @@ public class JobServiceImpl implements JobService {
         return 0;
     }
 
+
+
     @Override
+    @Transactional
     public List<JobDTO> getAllJobs() {
         return modelMapper.map(jobRepository.findAll(),new TypeToken<List<JobDTO>>(){}.getType());
     }
 
 
-/*    @Override
-    @Transactional
-    public List<JobDTO> getJobsByUserId(UUID companyId) {
-        List<Job> jobs = jobRepository.findAllJobsByCompanyId(companyId);
-
-        System.out.println("jobdto"+jobs);
-        return jobs.stream()
-                .map(Job -> modelMapper.map(Job, JobDTO.class))
-                .toList();
-    }*/
 
     @Override
     @Transactional
@@ -99,6 +92,18 @@ public class JobServiceImpl implements JobService {
 
         return jobs.stream()
                 .map(job -> customMapper.map(job, JobDTO.class))
+                .toList();
+    }
+
+
+
+    @Override
+    @Transactional
+    public List<JobDTO> getJobsByJobId(UUID jobId) {
+        List<Job> jobs = jobRepository.findAllJobsByJobId(jobId);
+        ModelMapper modelMapper = new ModelMapper();
+        return jobs.stream()
+                .map(job -> modelMapper.map(job, JobDTO.class))
                 .toList();
     }
 

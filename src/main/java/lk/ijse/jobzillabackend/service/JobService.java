@@ -15,4 +15,6 @@ public interface JobService {
     List<JobDTO> getAllJobs();
 
     List<JobDTO> getJobsByUserId(UUID companyId);
+
+    List<JobDTO> getJobsByJobId(UUID jobId);
 }

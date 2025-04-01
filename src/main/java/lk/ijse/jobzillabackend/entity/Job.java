@@ -3,6 +3,7 @@ package lk.ijse.jobzillabackend.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -74,6 +75,24 @@ public class Job implements Serializable {
 
     @Column(nullable = false)
     private String endDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> responsibilities = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> requirements = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        if (status == null) {
+            status = Status.ACTIVE;
+        }
+    }
 
 
     @ManyToOne

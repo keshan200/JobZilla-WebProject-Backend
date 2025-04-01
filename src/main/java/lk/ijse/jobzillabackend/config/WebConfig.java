@@ -9,6 +9,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:/C:/Users/kesha/Documents/IJSE GDES 69/Advanced-Api-Development/final-project/jobZilla-backend/uploads/");
+                .addResourceLocations("file:/C:\\Users\\kesha\\Documents\\IJSE GDES 69\\Advanced-Api-Development\\final-project\\JobZilla-WebProject-Backend\\uploads");
+
     }
 }
+
+

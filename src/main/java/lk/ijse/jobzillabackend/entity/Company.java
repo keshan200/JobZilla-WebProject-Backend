@@ -47,7 +47,7 @@ public class Company implements Serializable {
 
     private String background_img;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> image_collection = new ArrayList<>();
 
     @Column(nullable = false)

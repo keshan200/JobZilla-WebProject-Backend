@@ -1,21 +1,20 @@
 package lk.ijse.jobzillabackend.dto;
 
 
+import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.*;
 import jdk.jfr.Category;
 import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
+import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -88,6 +87,16 @@ public class JobDTO {
 
     @NotNull(message = "End date is required")
     private String endDate;
+
+
+    private Status status;
+
+    private List<String> responsibilities = new ArrayList<>();
+
+    private List<String> requirements = new ArrayList<>();
+
+
+
 
 
     private Company company;
