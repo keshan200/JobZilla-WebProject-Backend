@@ -27,7 +27,7 @@ public class UserDTO{
     private String username;
 
     @NotNull(message = "Mobile number is required")
-    private int mobile;
+    private String mobile;
 
     @NotNull(message = "role must be required")
     @Pattern(regexp = "^(EMPLOYER|CANDIDATE)$", message = "Role must be either EMPLOYER or CANDIDATE")

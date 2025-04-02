@@ -85,10 +85,10 @@ public class WebSecurityConfig {
                                 "/api/v1/application/getAll",
                                 "/uploads/**",
                                 "/api/v1/company/all/{cid}",
-                                "/api/v1/job/getJobsByJobId/{jobId}"
+                                "/api/v1/job/getJobsByJobId/{jobId}",
+                                "/api/v1/candidate/getAll",
+                                "/api/v1/candidate/getCandidateByCandId/{candId}"
                         ).permitAll()
-                                 
-
 
                         .requestMatchers(
                                          "/api/v1/company/register",

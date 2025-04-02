@@ -18,9 +18,7 @@ import java.util.UUID;
 public class SocialMediaDTO {
 
 
-
     private int sid;
-
 
     @Pattern(regexp = "WhatsApp|Facebook|LinkedIn|Instagram", message = "Invalid platform. Allowed values are: WhatsApp, Facebook, LinkedIn, Instagram.")
     private String platform;

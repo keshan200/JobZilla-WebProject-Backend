@@ -59,7 +59,7 @@ public class Candidate implements Serializable {
 
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "uid")
+    @JoinColumn(name = "user_id", referencedColumnName = "uid" )
     private User user;
 
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)

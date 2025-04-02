@@ -2,7 +2,9 @@ package lk.ijse.jobzillabackend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CandidateDTO;
+import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Candidate;
+import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.repo.CandidateRepository;
 import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.CandidateService;
@@ -16,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -53,12 +57,15 @@ public class CandidateServiceImpl implements CandidateService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Candidate candidate = modelMapper.map(candidateDTO, Candidate.class);
 
+
+
         if (file != null && !file.isEmpty()) {
             try {
                 String fileName = candidateDTO.getUser().getUid() + "_" + file.getOriginalFilename();
-                String uploadDir = "candidates/" + candidateDTO.getUser().getUid();
+                String uploadDir = "candidate/";
                 FileUploadUtil.saveFile(uploadDir, fileName, file);
-                candidate.setImg("uploads/" + uploadDir + "/" + fileName);
+                String filePath = uploadDir  + fileName;
+                candidate.setImg(filePath);
             } catch (IOException e) {
                 throw new RuntimeException("File saving failed: " + e.getMessage());
             }
@@ -102,7 +109,27 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
+    @Transactional
     public List<CandidateDTO> getAll() {
-        return modelMapper.map(candidateRepository.findAll(),new TypeToken<List<CandidateDTO>>(){}.getType());
+        List<Candidate> candidates = candidateRepository.findAll();
+        return candidates.stream()
+                .map(candidate -> {
+                    CandidateDTO dto = modelMapper.map(candidate, CandidateDTO.class);
+                    if (candidate.getImg() != null && !candidate.getImg().isEmpty()) {
+                        dto.setImg("http://localhost:8080/uploads/" + candidate.getImg());
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<CandidateDTO> getCandidatesByCandId(UUID candId) {
+        List<Candidate> cand = candidateRepository.findByCandId(candId);
+        ModelMapper modelMapper = new ModelMapper();
+        return cand.stream()
+                .map(candidate -> modelMapper.map(candidate, CandidateDTO.class))
+                .toList();
     }
 }
