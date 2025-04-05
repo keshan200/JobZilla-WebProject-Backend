@@ -2,11 +2,15 @@ package lk.ijse.jobzillabackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -18,7 +22,9 @@ import java.util.*;
 @AllArgsConstructor
 @Data
 @Entity
-public class Job implements Serializable {
+@ToString(exclude = "company")
+
+public class Job{
 
 
     @Id
@@ -41,8 +47,6 @@ public class Job implements Serializable {
     @Column(nullable = false)
     private String experience;
 
-    @Column(nullable = false)
-    private String qualification;
 
     private String gender;
 
@@ -64,7 +68,10 @@ public class Job implements Serializable {
     @Column(nullable = false)
     private String est_since;
 
-    @Column(nullable = false)
+
+
+    @Lob
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String jobDescription;
 
     @Column(nullable = false)
@@ -97,9 +104,12 @@ public class Job implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "company_id", referencedColumnName = "cid", nullable = false)
-    @JsonIgnore
+    @JsonBackReference("company-jobs")
     private Company company;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JsonManagedReference("job-applications")
     private List<Application> applications;
 }
+
+

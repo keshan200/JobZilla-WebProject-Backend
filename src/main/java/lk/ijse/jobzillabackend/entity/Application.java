@@ -1,11 +1,16 @@
 package lk.ijse.jobzillabackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.jobzillabackend.enums.ApplicationStatus;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -46,10 +51,12 @@ public class Application {
 
     @ManyToOne
     @JoinColumn(name = "job_id")
+    @JsonBackReference("job-applications")
     private Job job;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "candidate_id")
+    @JsonBackReference("candidate-applications")
     private Candidate candidate;
 
     @PrePersist

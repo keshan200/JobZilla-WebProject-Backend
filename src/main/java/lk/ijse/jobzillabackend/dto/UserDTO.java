@@ -1,6 +1,7 @@
 package lk.ijse.jobzillabackend.dto;
 
 import jakarta.validation.constraints.*;
+import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
@@ -16,8 +17,9 @@ public class UserDTO{
 
     private UUID uid;
 
-    @NotBlank(message = "email is required")
-    @Email(message = "Invalid Email Address")
+
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
     private String email;
 
     @NotBlank(message = "password is required")
@@ -39,4 +41,10 @@ public class UserDTO{
 
 
 
+
+    public UserDTO(UUID uid, String email, int mobile) {
+        this.uid = uid;
+        this.email = email;
+        this.mobile = String.valueOf(mobile);
+    }
 }

@@ -57,8 +57,6 @@ public class CandidateDTO {
 
     private User user;
 
-    private List<QualificationDTO> qualifications = new ArrayList<>();
-
     private List<Application> applications;
 
 }

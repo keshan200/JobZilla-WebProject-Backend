@@ -1,24 +1,28 @@
 package lk.ijse.jobzillabackend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID; 
+import java.util.UUID;
 
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-public class Candidate implements Serializable {
+public class Candidate  {
 
 
     @Id
@@ -62,9 +66,8 @@ public class Candidate implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "uid" )
     private User user;
 
-    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Qualification> qualifications = new ArrayList<>();
 
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+    @JsonManagedReference("candidate-applications")
     private List<Application> applications;
 }

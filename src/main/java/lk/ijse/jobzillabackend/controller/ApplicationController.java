@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.controller;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.ApplicationDTO;
 import lk.ijse.jobzillabackend.dto.CandidateDTO;
@@ -22,7 +23,6 @@ import java.util.List;
 public class ApplicationController {
 
     private final ApplicationService applicationService;
-
 
     public ApplicationController(ApplicationService applicationService) {
         this.applicationService = applicationService;

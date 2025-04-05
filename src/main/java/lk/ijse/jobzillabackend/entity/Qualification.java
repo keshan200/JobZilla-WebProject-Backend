@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
-public class Qualification implements Serializable {
+public class Qualification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,9 +35,7 @@ public class Qualification implements Serializable {
     private String year;
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
-    @JoinColumn(name = "cand_id", referencedColumnName = "cand_id", nullable = false)
-    private Candidate candidate;
+
 
 
 }

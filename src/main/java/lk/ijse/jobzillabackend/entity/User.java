@@ -1,6 +1,8 @@
 package lk.ijse.jobzillabackend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.jobzillabackend.enums.Status;
 import lk.ijse.jobzillabackend.enums.UserRole;
@@ -8,6 +10,7 @@ import lk.ijse.jobzillabackend.validations.ValidRoleBasedEmail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -20,7 +23,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Data
 @ValidRoleBasedEmail
-public class User implements Serializable {
+public class User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -49,6 +52,10 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
+
+
+
+
 
     @PrePersist
     public void prePersist() {

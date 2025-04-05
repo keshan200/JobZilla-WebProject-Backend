@@ -34,7 +34,7 @@ public class QualificationController {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.: " + qualificationDTO);
 
         System.out.println("Qualification DTO: " + qualificationDTO);
-        System.out.println("Candidate ID: " + qualificationDTO.getCandidate().getCand_id());
+
 
         try {
             int response = qualificationService.saveQualification(qualificationDTO);

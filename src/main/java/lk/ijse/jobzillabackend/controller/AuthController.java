@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.AuthDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
+import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.enums.Status;
 import lk.ijse.jobzillabackend.service.impl.UserServiceImpl;
@@ -19,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RestController
@@ -82,6 +85,9 @@ public class AuthController {
         authDTO.setId(user.getUid());
         authDTO.setRefreshToken(refreshToken);
 
+
+
+
         System.out.println(authDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -137,6 +143,7 @@ public class AuthController {
                     .body(new ResponseDTO(VarList.Internal_Server_Error, "Error refreshing token", e.getMessage()));
         }
     }
+
 
     @GetMapping("/api/v1/validate")
     public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {

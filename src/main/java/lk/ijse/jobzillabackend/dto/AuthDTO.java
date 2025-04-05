@@ -1,6 +1,5 @@
 package lk.ijse.jobzillabackend.dto;
 
-import lk.ijse.jobzillabackend.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +17,8 @@ public class AuthDTO {
     private String role;
     private String token;
     private String refreshToken;
+
+    private UUID company;
+
 
 }

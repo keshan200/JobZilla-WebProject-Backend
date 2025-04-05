@@ -1,8 +1,11 @@
 package lk.ijse.jobzillabackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Job;
+import lk.ijse.jobzillabackend.entity.SocialMedia;
+import lk.ijse.jobzillabackend.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,11 +53,15 @@ public class CompanyDTO {
     @Pattern(regexp = "\\d{4}", message = "Establishment year must be a 4-digit number")
     private String est_since;
 
-    private UserDTO user;
 
-    private List<SocialMediaDTO> socialMediaProfiles;
 
-    private List<Application> applications;
+
+
+    private User user;
+
+    private List<SocialMedia> socialMediaProfiles;
 
     private List<Job> jobs;
+
+
 }

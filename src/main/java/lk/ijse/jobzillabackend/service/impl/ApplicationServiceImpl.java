@@ -38,6 +38,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 
     @Override
+    @Transactional
     public int saveApplication(ApplicationDTO applicationDTO, MultipartFile file) throws IOException {
 
         if (applicationDTO.getId() != null && applicationRepository.existsById(applicationDTO.getId())) {

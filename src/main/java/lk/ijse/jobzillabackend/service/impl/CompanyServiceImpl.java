@@ -2,6 +2,8 @@ package lk.ijse.jobzillabackend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
+import lk.ijse.jobzillabackend.dto.JobDTO;
+import lk.ijse.jobzillabackend.dto.SocialMediaDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
@@ -166,7 +168,29 @@ public class CompanyServiceImpl implements CompanyService{
                 .toList();
     }
 
+
+
     @Override
+    @Transactional
+    public List<CompanyDTO> getCompaniesByCid(UUID cid) {
+        Optional<Company> companyOpt = companyRepository.findByCid(cid);
+
+        if (companyOpt.isEmpty()) {
+            return List.of();
+        }
+
+        Company company = companyOpt.get();
+        CompanyDTO companyDTO = modelMapper.map(company, CompanyDTO.class);
+        return List.of(companyDTO);
+    }
+
+
+
+}
+
+
+
+   /* @Override
     @Transactional
     public List<CompanyDTO> getCompaniesByCid(UUID cid) {
         Optional<Company> companies = companyRepository.findByCid(cid);
@@ -181,6 +205,4 @@ public class CompanyServiceImpl implements CompanyService{
                 })
                 .orElseGet(Collections::emptyList);
     }
-
-
-}
+*/

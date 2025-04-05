@@ -7,6 +7,7 @@ import lk.ijse.jobzillabackend.service.CandidateService;
 import lk.ijse.jobzillabackend.util.FileUploadUtil;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
@@ -28,7 +29,7 @@ public class CandidateController {
         this.candidateService = candidateService;
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register" ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAnyAuthority('CANDIDATE')")
     public ResponseEntity<ResponseDTO> saveCandidate(
             @RequestPart("candidate") @Valid String candidateData,

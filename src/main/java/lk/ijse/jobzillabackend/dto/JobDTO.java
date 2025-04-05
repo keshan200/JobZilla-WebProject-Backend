@@ -43,9 +43,6 @@ public class JobDTO {
     @Size(max = 50, message = "Experience description must not exceed 50 characters")
     private String experience;
 
-    @NotBlank(message = "Qualification is required")
-    @Size(max = 100, message = "Qualification must not exceed 100 characters")
-    private String qualification;
 
     @NotBlank(message = "Gender is required")
    /* @Pattern(regexp = "Male|Female|Other", message = "Invalid gender value")*/
@@ -76,7 +73,7 @@ public class JobDTO {
     private String est_since;
 
     @NotBlank(message = "Job description is required")
-    @Size(max = 500, message = "Job description must not exceed 500 characters")
+    @Size( message = "Job description must not exceed 500 characters")
     private String jobDescription;
 
     @NotBlank
@@ -95,14 +92,18 @@ public class JobDTO {
 
     private List<String> requirements = new ArrayList<>();
 
-
-
-
-
     private Company company;
 
     private List<Application> applications;
 
+
+
+
+    public JobDTO(UUID jobId, String jobTitle, String jobCategory) {
+        this.jobId = jobId;
+        this.jobTitle = jobTitle;
+        this.jobCategory = jobCategory;
+    }
 }
 
 

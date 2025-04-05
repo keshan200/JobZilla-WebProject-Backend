@@ -134,6 +134,7 @@ public class JobController {
 
 
     @GetMapping("/getJobsByJobId/{jobId}")
+
     public List<JobDTO> getJobsByJobId(@PathVariable UUID jobId) {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+jobId);
         return jobService.getJobsByJobId(jobId);

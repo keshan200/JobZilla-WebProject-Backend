@@ -44,7 +44,6 @@ public class ApplicationDTO{
 
     private ApplicationStatus status;
 
-
     private Job job;
 
     private Candidate candidate;

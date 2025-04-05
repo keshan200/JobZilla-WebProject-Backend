@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -74,10 +75,14 @@ public class JobServiceImpl implements JobService {
 
 
 
-    @Override
+   /* @Override
     @Transactional
     public List<JobDTO> getAllJobs() {
-        return modelMapper.map(jobRepository.findAll(),new TypeToken<List<JobDTO>>(){}.getType());
+       *//* return modelMapper.map(jobRepository.findAll(),new TypeToken<List<JobDTO>>(){}.getType());*//*
+        List<Job> jobs = jobRepository.findAll();
+        return jobs.stream()
+                .map(job -> modelMapper.map(job, JobDTO.class))
+                .collect(Collectors.toList());
     }
 
 
@@ -106,5 +111,32 @@ public class JobServiceImpl implements JobService {
                 .map(job -> modelMapper.map(job, JobDTO.class))
                 .toList();
     }
+*/
 
+    @Override
+    @Transactional
+    public List<JobDTO> getAllJobs() {
+        List<Job> jobs = jobRepository.findAll();
+        return jobs.stream()
+                .map(job -> modelMapper.map(job, JobDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<JobDTO> getJobsByUserId(UUID companyId) {
+        List<Job> jobs = jobRepository.findAllJobsByCompanyId(companyId);
+        return jobs.stream()
+                .map(job -> modelMapper.map(job, JobDTO.class))
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public List<JobDTO> getJobsByJobId(UUID jobId) {
+        List<Job> jobs = jobRepository.findAllJobsByJobId(jobId);
+        return jobs.stream()
+                .map(job -> modelMapper.map(job, JobDTO.class))
+                .toList();
+    }
 }

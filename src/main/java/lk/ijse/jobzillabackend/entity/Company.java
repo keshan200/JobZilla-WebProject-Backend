@@ -3,21 +3,23 @@ package lk.ijse.jobzillabackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.io.Serializable;
 import java.util.*;
-
+@Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Entity
-public class Company implements Serializable {
+@ToString(exclude = {"jobs", "socialMediaProfiles", "user"})
+public class Company{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,7 +39,8 @@ public class Company implements Serializable {
     @Column(nullable = false)
     private String full_address;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     private String website;
@@ -55,20 +58,23 @@ public class Company implements Serializable {
 
 
 
-    @OneToOne()
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = false,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @JsonManagedReference("company-socialMediaProfiles")
     private List<SocialMedia> socialMediaProfiles;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference("company-jobs")
     private List<Job> jobs;
 
-    @ManyToMany
-    @JsonIgnore
-    private List<Application> applications;
+
+
+
+
+
 
 
 

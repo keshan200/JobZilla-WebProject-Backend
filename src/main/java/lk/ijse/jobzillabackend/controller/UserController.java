@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.AuthDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
+import lk.ijse.jobzillabackend.email.EmailService;
 import lk.ijse.jobzillabackend.service.UserService;
 import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
@@ -15,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -25,12 +25,15 @@ public class UserController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final EmailService emailService;
 
 
 
-    public UserController(UserService userService, JwtUtil jwtUtil) {
+    public UserController(UserService userService, JwtUtil jwtUtil, EmailService emailService) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
+
+        this.emailService = emailService;
     }
 
     @PostMapping(value = "/register")
@@ -54,6 +57,7 @@ public class UserController {
 
                     System.out.println("Refresh Token: " + refreshToken);
 
+                    emailService.sendWelcomeEmail(userDTO.getEmail(),userDTO.getUsername());
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created, "Success", authDTO));
 
