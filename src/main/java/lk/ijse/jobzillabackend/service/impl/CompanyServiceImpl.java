@@ -79,7 +79,8 @@ public class CompanyServiceImpl implements CompanyService{
             }
         }
 
-        companyRepository.save(company);
+        Company save = companyRepository.save(company);
+
         return VarList.Created;
     }
 
@@ -184,6 +185,11 @@ public class CompanyServiceImpl implements CompanyService{
         return List.of(companyDTO);
     }
 
+    @Override
+    public UUID getCompanyID(UUID id) {
+        Company company = companyRepository.findByCid(id).orElseThrow(() -> new RuntimeException("Company not found"));
+        return company.getCid();
+    }
 
 
 }

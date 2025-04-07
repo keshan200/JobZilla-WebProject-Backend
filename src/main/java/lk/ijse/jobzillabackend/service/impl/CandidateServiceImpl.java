@@ -2,8 +2,10 @@ package lk.ijse.jobzillabackend.service.impl;
 
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CandidateDTO;
+import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Candidate;
+import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.repo.CandidateRepository;
 import lk.ijse.jobzillabackend.repo.UserRepository;
@@ -13,11 +15,14 @@ import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -132,4 +137,15 @@ public class CandidateServiceImpl implements CandidateService {
                 .map(candidate -> modelMapper.map(candidate, CandidateDTO.class))
                 .toList();
     }
+
+
+    @Override
+    @Transactional
+    public List<CandidateDTO> getCandidateByUserId(UUID userId) {
+        Optional<Candidate> candidates = candidateRepository.findByUser_Uid(userId);
+        return candidates.stream()
+                .map(candidate -> modelMapper.map(candidate, CandidateDTO.class))
+                .toList();
+    }
+
 }

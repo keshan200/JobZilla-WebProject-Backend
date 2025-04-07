@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface CompanyService {
@@ -16,4 +17,7 @@ public interface CompanyService {
     List<CompanyDTO> getAllCompanies();
     List<CompanyDTO>getCompanyByUserID(UUID userId);
      List<CompanyDTO> getCompaniesByCid(UUID cid);
+
+    UUID getCompanyID(UUID id);
+
 }

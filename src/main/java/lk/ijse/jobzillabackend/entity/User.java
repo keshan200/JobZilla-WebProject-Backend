@@ -16,6 +16,7 @@ import org.hibernate.type.SqlTypes;
 
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -53,6 +54,18 @@ public class User{
     @Column(nullable = false)
     private Status status;
 
+
+
+
+
+
+    @OneToMany(mappedBy = "sender",fetch = FetchType.EAGER)
+    @JsonManagedReference("sender-user")
+    private List<Message> sentMessages;
+
+    @OneToMany(mappedBy = "receiver" ,fetch = FetchType.EAGER)
+    @JsonBackReference("receiver-user")
+    private List<Message> receivedMessages;
 
 
 

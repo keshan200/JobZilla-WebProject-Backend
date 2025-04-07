@@ -3,6 +3,7 @@ package lk.ijse.jobzillabackend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.*;
+import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.service.CandidateService;
 import lk.ijse.jobzillabackend.util.FileUploadUtil;
 import lk.ijse.jobzillabackend.util.VarList;
@@ -119,6 +120,19 @@ public class CandidateController {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+candId);
         return candidateService.getCandidatesByCandId(candId);
     }
+
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<CandidateDTO>> getCompanyByUserID(@PathVariable UUID userId) {
+        List<CandidateDTO> candidateDTOS = candidateService.getCandidateByUserId(userId);
+        if (candidateDTOS.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(candidateDTOS);
+    }
+
+
 }
 
 

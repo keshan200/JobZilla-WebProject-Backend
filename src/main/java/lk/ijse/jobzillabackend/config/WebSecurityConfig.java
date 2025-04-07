@@ -87,7 +87,10 @@ public class WebSecurityConfig {
                                 "/api/v1/company/all/{cid}",
                                 "/api/v1/job/getJobsByJobId/{jobId}",
                                 "/api/v1/candidate/getAll",
-                                "/api/v1/candidate/getCandidateByCandId/{candId}"
+                                "/api/v1/candidate/getCandidateByCandId/{candId}",
+                                "/ws/**"
+
+
                         ).permitAll()
 
                         .requestMatchers(
@@ -96,7 +99,9 @@ public class WebSecurityConfig {
                                          "/api/v1/job/company/{companyId}"
                                          ).hasAuthority("EMPLOYER")
 
-
+                        .requestMatchers(
+                                "/api/v1/candidate/user/{userId}"
+                           ).hasAuthority("CANDIDATE")
 
 
                         .requestMatchers("/api/v1/job/save","/api/v1/job/post-job").hasAuthority("EMPLOYER")

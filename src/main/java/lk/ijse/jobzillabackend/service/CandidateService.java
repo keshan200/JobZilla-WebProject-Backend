@@ -16,4 +16,7 @@ public interface CandidateService {
     List<CandidateDTO> getAll();
 
     List<CandidateDTO> getCandidatesByCandId(UUID candId);
+
+    List<CandidateDTO> getCandidateByUserId(UUID userId);
 }
+

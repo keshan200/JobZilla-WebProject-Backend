@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -50,10 +51,14 @@ public class CompanyController {
             CompanyDTO companyDTO = objectMapper.readValue(companyData, CompanyDTO.class);
 
 
+
             int result = companyService.saveCompany(companyDTO, files);
 
             switch (result) {
                 case VarList.Created -> {
+
+
+
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created, "Company created successfully", companyDTO));
                 }

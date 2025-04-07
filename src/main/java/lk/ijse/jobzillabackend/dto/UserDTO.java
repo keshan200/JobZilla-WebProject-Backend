@@ -2,12 +2,14 @@ package lk.ijse.jobzillabackend.dto;
 
 import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.Company;
+import lk.ijse.jobzillabackend.entity.Message;
 import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -37,10 +39,9 @@ public class UserDTO{
 
     private Status status ;
 
+    private List<Message> sentMessages;
 
-
-
-
+    private List<Message> receivedMessages;
 
     public UserDTO(UUID uid, String email, int mobile) {
         this.uid = uid;

@@ -17,4 +17,8 @@ public interface CandidateRepository extends JpaRepository<Candidate, UUID> {
     @Query("SELECT c FROM Candidate c WHERE c.cand_id = :candId")
     List<Candidate> findByCandId(@Param("candId") UUID candId);
 
+
+
+    Optional<Candidate> findByUser_Uid(UUID uid);
+
 }

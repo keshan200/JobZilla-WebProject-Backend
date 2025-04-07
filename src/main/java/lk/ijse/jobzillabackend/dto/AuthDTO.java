@@ -17,6 +17,7 @@ public class AuthDTO {
     private String role;
     private String token;
     private String refreshToken;
+    private String name;
 
     private UUID company;
 
