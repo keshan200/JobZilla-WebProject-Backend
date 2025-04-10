@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
@@ -150,22 +151,30 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     @Transactional
     public List<CompanyDTO> getAllCompanies() {
+        ObjectMapper objectMapper = new ObjectMapper();
         List<Company> companies = companyRepository.findAll();
 
         return companies.stream().map(company -> {
-            CompanyDTO dto = modelMapper.map(company, CompanyDTO.class);
+            CompanyDTO dto = objectMapper.convertValue(company, CompanyDTO.class);
             dto.setLogo_img("http://localhost:8080/uploads/" + company.getLogo_img());
+            System.out.println("Image URL: " + dto.getLogo_img());
             return dto;
         }).collect(Collectors.toList());
+
     }
 
 
     @Override
     @Transactional
     public List<CompanyDTO> getCompanyByUserID(UUID userId) {
-        Optional<Company> companies = companyRepository.findByUserId(userId);
-        return companies.stream()
-                .map(company -> modelMapper.map(company, CompanyDTO.class))
+        Optional<Company> companyOpt = companyRepository.findByUserId(userId);
+        if (companyOpt.isEmpty()) {
+            return List.of();
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        return companyOpt.stream()
+                .map(company -> objectMapper.convertValue(company, CompanyDTO.class))
                 .toList();
     }
 
@@ -175,13 +184,13 @@ public class CompanyServiceImpl implements CompanyService{
     @Transactional
     public List<CompanyDTO> getCompaniesByCid(UUID cid) {
         Optional<Company> companyOpt = companyRepository.findByCid(cid);
-
         if (companyOpt.isEmpty()) {
             return List.of();
         }
-
         Company company = companyOpt.get();
-        CompanyDTO companyDTO = modelMapper.map(company, CompanyDTO.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        CompanyDTO companyDTO = objectMapper.convertValue(company, CompanyDTO.class);
+        companyDTO.setJobs(null);
         return List.of(companyDTO);
     }
 

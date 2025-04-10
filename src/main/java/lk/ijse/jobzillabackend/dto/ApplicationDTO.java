@@ -1,5 +1,8 @@
 package lk.ijse.jobzillabackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
@@ -20,6 +23,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+
+
 public class ApplicationDTO{
 
      private UUID id;
@@ -44,9 +49,10 @@ public class ApplicationDTO{
 
     private ApplicationStatus status;
 
-    private Job job;
 
-    private Candidate candidate;
+    private JobDTO job;
+
+    private CandidateDTO candidate;
 
 
 

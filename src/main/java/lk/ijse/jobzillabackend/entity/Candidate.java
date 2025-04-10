@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
-public class Candidate  {
+
+public class Candidate implements Serializable  {
 
 
     @Id
@@ -68,6 +70,6 @@ public class Candidate  {
 
 
     @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
-    @JsonManagedReference("candidate-applications")
+    @JsonManagedReference("candidate-application")
     private List<Application> applications;
 }

@@ -1,11 +1,8 @@
 package lk.ijse.jobzillabackend.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.validation.constraints.*;
-import lk.ijse.jobzillabackend.entity.Application;
-import lk.ijse.jobzillabackend.entity.Job;
-import lk.ijse.jobzillabackend.entity.SocialMedia;
-import lk.ijse.jobzillabackend.entity.User;
+import lk.ijse.jobzillabackend.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +12,7 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+
 public class CompanyDTO {
 
 
@@ -57,11 +55,13 @@ public class CompanyDTO {
 
 
 
-    private User user;
+    private UserDTO user;
 
-    private List<SocialMedia> socialMediaProfiles;
 
-    private List<Job> jobs;
+    private List<SocialMediaDTO> socialMediaProfiles;
+
+
+    private List<JobDTO> jobs;
 
 
 }

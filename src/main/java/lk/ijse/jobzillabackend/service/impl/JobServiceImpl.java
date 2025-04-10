@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
@@ -9,12 +10,14 @@ import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.entity.Qualification;
 import lk.ijse.jobzillabackend.repo.CompanyRepository;
 import lk.ijse.jobzillabackend.repo.JobRepository;
+import lk.ijse.jobzillabackend.sepecifications.JobSpecifications;
 import lk.ijse.jobzillabackend.service.JobService;
 import lk.ijse.jobzillabackend.service.QualificationService;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -117,17 +120,34 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public List<JobDTO> getAllJobs() {
         List<Job> jobs = jobRepository.findAll();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
         return jobs.stream()
-                .map(job -> modelMapper.map(job, JobDTO.class))
+                .map(job -> {
+                    JobDTO jobDTO = objectMapper.convertValue(job, JobDTO.class);
+                    if (job.getCompany() != null) {
+                        jobDTO.setCompany(objectMapper.convertValue(job.getCompany(), CompanyDTO.class));
+                    }
+                    return jobDTO;
+                })
                 .collect(Collectors.toList());
+
     }
 
     @Override
     @Transactional
     public List<JobDTO> getJobsByUserId(UUID companyId) {
         List<Job> jobs = jobRepository.findAllJobsByCompanyId(companyId);
+        ObjectMapper objectMapper = new ObjectMapper();
         return jobs.stream()
-                .map(job -> modelMapper.map(job, JobDTO.class))
+                .map(job -> {
+                    JobDTO jobDTO = objectMapper.convertValue(job, JobDTO.class);
+                    if (job.getCompany() != null) {
+                        jobDTO.setCompany(objectMapper.convertValue(job.getCompany(), CompanyDTO.class));
+                    }
+                    return jobDTO;
+                })
                 .toList();
     }
 
@@ -135,8 +155,37 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public List<JobDTO> getJobsByJobId(UUID jobId) {
         List<Job> jobs = jobRepository.findAllJobsByJobId(jobId);
+        ObjectMapper objectMapper = new ObjectMapper();
+
         return jobs.stream()
-                .map(job -> modelMapper.map(job, JobDTO.class))
+                .map(job -> {
+                    JobDTO jobDTO = objectMapper.convertValue(job, JobDTO.class);
+                    CompanyDTO companyDTO = objectMapper.convertValue(job.getCompany(), CompanyDTO.class);
+                    jobDTO.setCompany(companyDTO);
+
+                    return jobDTO;
+                })
                 .toList();
+    }
+
+
+
+
+    @Override
+    @Transactional
+    public List<JobDTO> searchJobs(String jobTitle, String location, String jobType) {
+
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        List<Job> jobs = jobRepository.searchJobs(
+                (jobTitle != null && !jobTitle.isEmpty()) ? "%" + jobTitle + "%" : null,
+                (location != null && !location.isEmpty()) ? "%" + location + "%" : null,
+                (jobType != null && !jobType.isEmpty()) ? "%" + jobType + "%" : null
+        );
+
+        return jobs.stream()
+                .map(job -> objectMapper.convertValue(job, JobDTO.class))
+                .collect(Collectors.toList());
     }
 }

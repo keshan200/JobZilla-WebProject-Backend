@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -67,6 +69,9 @@ public class WebSecurityConfig {
         return source;
     }
 
+
+
+
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -88,15 +93,17 @@ public class WebSecurityConfig {
                                 "/api/v1/job/getJobsByJobId/{jobId}",
                                 "/api/v1/candidate/getAll",
                                 "/api/v1/candidate/getCandidateByCandId/{candId}",
-                                "/ws/**"
-
+                                "/ws/**",
+                                "/api/v1/job/searchJobs/**"
 
                         ).permitAll()
+
 
                         .requestMatchers(
                                          "/api/v1/company/register",
                                          "/api/v1/company/user/{userId}",
-                                         "/api/v1/job/company/{companyId}"
+                                         "/api/v1/job/company/{companyId}",
+                                         "/api/v1/application/company/{companyId}"
                                          ).hasAuthority("EMPLOYER")
 
                         .requestMatchers(
@@ -117,10 +124,7 @@ public class WebSecurityConfig {
     }
 
 
-
-
 }
-
 
 
 

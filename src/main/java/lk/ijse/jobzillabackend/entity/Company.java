@@ -3,6 +3,7 @@ package lk.ijse.jobzillabackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,8 +19,8 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"jobs", "socialMediaProfiles", "user"})
-public class Company{
+
+public class Company implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -58,16 +59,16 @@ public class Company{
 
 
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
-    @JsonManagedReference("company-socialMediaProfiles")
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("company-socialMedia")
     private List<SocialMedia> socialMediaProfiles;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference("company-jobs")
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @JsonManagedReference("company-job")
     private List<Job> jobs;
 
 

@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CandidateDTO;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
@@ -20,10 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,14 +115,42 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     @Transactional
-    public List<CandidateDTO> getAll() {
+/*    public List<CandidateDTO> getAll() {
         List<Candidate> candidates = candidateRepository.findAll();
+        ObjectMapper objectMapper = new ObjectMapper();
+
         return candidates.stream()
                 .map(candidate -> {
-                    CandidateDTO dto = modelMapper.map(candidate, CandidateDTO.class);
+                    CandidateDTO dto = objectMapper.convertValue(candidate, CandidateDTO.class);
                     if (candidate.getImg() != null && !candidate.getImg().isEmpty()) {
                         dto.setImg("http://localhost:8080/uploads/" + candidate.getImg());
+
                     }
+                    return dto;
+                })
+                .collect(Collectors.toList());
+    }*/
+    public List<CandidateDTO> getAll() {
+        List<Candidate> candidates = candidateRepository.findAll();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return candidates.stream()
+                .map(candidate -> {
+                    CandidateDTO dto = objectMapper.convertValue(candidate, CandidateDTO.class);
+
+
+                    if (candidate.getImg() != null && !candidate.getImg().isEmpty()) {
+                        try {
+                            String imagePath = "uploads/" + candidate.getImg();
+                            byte[] fileContent = Files.readAllBytes(Paths.get(imagePath));
+                            String encodedImage = Base64.getEncoder().encodeToString(fileContent);
+                            dto.setImg("data:image/jpeg;base64," + encodedImage);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -132,10 +160,13 @@ public class CandidateServiceImpl implements CandidateService {
     @Transactional
     public List<CandidateDTO> getCandidatesByCandId(UUID candId) {
         List<Candidate> cand = candidateRepository.findByCandId(candId);
-        ModelMapper modelMapper = new ModelMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         return cand.stream()
-                .map(candidate -> modelMapper.map(candidate, CandidateDTO.class))
-                .toList();
+                .map(candidate -> {
+                    CandidateDTO dto = objectMapper.convertValue(candidate, CandidateDTO.class);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
 
@@ -143,9 +174,13 @@ public class CandidateServiceImpl implements CandidateService {
     @Transactional
     public List<CandidateDTO> getCandidateByUserId(UUID userId) {
         Optional<Candidate> candidates = candidateRepository.findByUser_Uid(userId);
+        if (candidates.isEmpty()) {
+            return Collections.emptyList();
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
         return candidates.stream()
-                .map(candidate -> modelMapper.map(candidate, CandidateDTO.class))
-                .toList();
+                .map(candidate -> objectMapper.convertValue(candidate, CandidateDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

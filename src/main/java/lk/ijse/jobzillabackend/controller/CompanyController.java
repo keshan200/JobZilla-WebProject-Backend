@@ -157,12 +157,11 @@ public class CompanyController {
     @GetMapping(value = "getAll")
     public List<CompanyDTO> getAllUsers() {
 
-        try {
-            return companyService.getAllCompanies();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+      try {
+          return companyService.getAllCompanies();
+      } catch (RuntimeException e) {
+          throw new RuntimeException(e);
+      }
     }
 
 

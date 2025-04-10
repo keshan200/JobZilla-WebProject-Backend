@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.jobzillabackend.enums.ApplicationStatus;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +24,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
-public class Application {
+
+public class Application implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -51,12 +54,12 @@ public class Application {
 
     @ManyToOne
     @JoinColumn(name = "job_id")
-    @JsonBackReference("job-applications")
+    @JsonBackReference("job-application")
     private Job job;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "candidate_id")
-    @JsonBackReference("candidate-applications")
+    @JsonBackReference("candidate-application")
     private Candidate candidate;
 
     @PrePersist

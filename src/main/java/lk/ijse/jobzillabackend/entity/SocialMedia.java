@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Entity
-public class SocialMedia{
+public class SocialMedia implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +30,7 @@ public class SocialMedia{
 
     @ManyToOne
     @JoinColumn(name = "company_id",referencedColumnName = "cid", nullable = false)
-    @JsonBackReference("company-socialMediaProfiles")
+    @JsonBackReference("company-socialMedia")
     private Company company;
 
 }

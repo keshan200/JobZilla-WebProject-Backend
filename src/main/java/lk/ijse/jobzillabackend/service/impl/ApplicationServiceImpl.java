@@ -1,7 +1,10 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.ApplicationDTO;
+import lk.ijse.jobzillabackend.dto.CandidateDTO;
+import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
@@ -21,6 +24,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -45,6 +50,8 @@ public class ApplicationServiceImpl implements ApplicationService {
             return VarList.Not_Acceptable;
         }
 
+
+
         candidateRepository.findById(applicationDTO.getCandidate().getCand_id())
                 .orElseThrow(() -> new IllegalArgumentException("Candidate not found"));
 
@@ -67,26 +74,48 @@ public class ApplicationServiceImpl implements ApplicationService {
 
 
 
+    @Transactional
+    @Override
+    public List<ApplicationDTO> getApplications() {
+       /* List<Application> applications = applicationRepository.findAll();
+        return applications.stream()
+                .map(application -> {
+
+                    ApplicationDTO dto = modelMapper.map(application, ApplicationDTO.class);
+
+                    if (application.getCandidate() != null) {
+                        dto.setCandidate(modelMapper.map(application.getCandidate(), CandidateDTO.class));
+                    }
+
+                    if (application.getJob() != null) {
+                        dto.setJob(modelMapper.map(application.getJob(), JobDTO.class));
+                    }
+
+                    return dto;
+                })
+                .collect(Collectors.toList());*/
+        return null;
+    }
+
     @Override
     @Transactional
-    public List<ApplicationDTO> getApplications() {
+    public List<ApplicationDTO> getApplicationsByCompanyId(UUID companyId) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Optional<Application> applications = applicationRepository.findApplicationsByCompanyId(companyId);
 
-        List<Application> applications = applicationRepository.findAll();
-        List<ApplicationDTO> applicationDTOS = applications.stream().map(application -> {
-            ApplicationDTO dto = modelMapper.map(application, ApplicationDTO.class);
+        return applications.stream()
+                .map(application -> {
+                    ApplicationDTO applicationDTO = objectMapper.convertValue(application, ApplicationDTO.class);
 
+                    CandidateDTO candidateDTO = objectMapper.convertValue(application.getCandidate(), CandidateDTO.class);
+                    applicationDTO.setCandidate(candidateDTO);
 
-            if (application.getCandidate() != null) {
-                dto.setCandidate(modelMapper.map(application.getCandidate(), Candidate.class));
-            }
+                    JobDTO jobDTO = objectMapper.convertValue(application.getJob(), JobDTO.class);
+                    applicationDTO.setJob(jobDTO);
 
-            if (application.getJob() != null) {
-                dto.setJob(modelMapper.map(application.getJob(), Job.class));
-            }
-
-            return dto;
-        }).collect(Collectors.toList());
-
-        return applicationDTOS;
+                    return applicationDTO;
+                })
+                .collect(Collectors.toList());
     }
+
 }

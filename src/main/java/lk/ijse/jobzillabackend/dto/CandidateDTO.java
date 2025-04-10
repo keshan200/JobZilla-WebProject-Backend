@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+
 public class CandidateDTO {
 
     private UUID cand_id;
@@ -52,11 +54,13 @@ public class CandidateDTO {
     @Size(max = 500, message = "Description must not exceed 500 characters")
     private String description;
 
-
     private List<String> skills = new ArrayList<>();
 
-    private User user;
 
-    private List<Application> applications;
+
+
+    private UserDTO user;
+
+    private List<ApplicationDTO> applications;
 
 }

@@ -1,6 +1,7 @@
 package lk.ijse.jobzillabackend.dto;
 
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.ElementCollection;
 import jakarta.validation.constraints.*;
 import jdk.jfr.Category;
@@ -19,6 +20,9 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+
+
+
 public class JobDTO {
 
     private UUID jobId;
@@ -92,18 +96,14 @@ public class JobDTO {
 
     private List<String> requirements = new ArrayList<>();
 
-    private Company company;
-
-    private List<Application> applications;
 
 
 
+    private CompanyDTO company;
 
-    public JobDTO(UUID jobId, String jobTitle, String jobCategory) {
-        this.jobId = jobId;
-        this.jobTitle = jobTitle;
-        this.jobCategory = jobCategory;
-    }
+    private List<ApplicationDTO> applications;
+
+
 }
 
 

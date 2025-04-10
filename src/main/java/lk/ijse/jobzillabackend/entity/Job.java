@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.jobzillabackend.enums.Status;
@@ -22,9 +23,9 @@ import java.util.*;
 @AllArgsConstructor
 @Data
 @Entity
-@ToString(exclude = "company")
 
-public class Job{
+
+public class Job implements Serializable {
 
 
     @Id
@@ -101,14 +102,14 @@ public class Job{
         }
     }
 
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", referencedColumnName = "cid", nullable = false)
-    @JsonBackReference("company-jobs")
+    @JsonBackReference("company-job")
     private Company company;
 
-    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    @JsonManagedReference("job-applications")
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+    @JsonManagedReference("job-application")
     private List<Application> applications;
 }
 

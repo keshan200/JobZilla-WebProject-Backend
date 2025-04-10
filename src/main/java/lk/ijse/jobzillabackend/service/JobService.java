@@ -17,4 +17,6 @@ public interface JobService {
     List<JobDTO> getJobsByUserId(UUID companyId);
 
     List<JobDTO> getJobsByJobId(UUID jobId);
+
+    List<JobDTO> searchJobs(String jobTitle, String location, String jobType);
 }

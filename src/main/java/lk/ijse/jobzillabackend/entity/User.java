@@ -1,8 +1,6 @@
 package lk.ijse.jobzillabackend.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lk.ijse.jobzillabackend.enums.Status;
 import lk.ijse.jobzillabackend.enums.UserRole;
@@ -10,13 +8,10 @@ import lk.ijse.jobzillabackend.validations.ValidRoleBasedEmail;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 
-import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -57,15 +52,6 @@ public class User{
 
 
 
-
-
-    @OneToMany(mappedBy = "sender",fetch = FetchType.EAGER)
-    @JsonManagedReference("sender-user")
-    private List<Message> sentMessages;
-
-    @OneToMany(mappedBy = "receiver" ,fetch = FetchType.EAGER)
-    @JsonBackReference("receiver-user")
-    private List<Message> receivedMessages;
 
 
 

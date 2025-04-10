@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/application")
@@ -76,6 +77,14 @@ public class ApplicationController {
             e.printStackTrace();
             throw new RuntimeException("Error fetching applications: " + e.getMessage());
         }
+    }
+
+
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<List<ApplicationDTO>> getApplicationsByCompanyId(@PathVariable UUID companyId) {
+        List<ApplicationDTO> applicationDTOs = applicationService.getApplicationsByCompanyId(companyId);
+        return ResponseEntity.ok(applicationDTOs);
     }
 
 }

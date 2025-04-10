@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -141,4 +142,31 @@ public class JobController {
     }
 
 
+
+
+    @GetMapping("/searchJobs/{jobTitle}/{location}/{jobType}")
+    public ResponseEntity<List<JobDTO>> searchJobs(@PathVariable(required = false) String jobTitle,
+                                                   @PathVariable(required = false) String location,
+                                                   @PathVariable(required = false) String jobType) {
+        try {
+            System.out.println("Searching for jobs with parameters: jobTitle=" + jobTitle + ", location=" + location + ", jobType=" + jobType);
+
+            List<JobDTO> jobs = jobService.searchJobs(jobTitle, location, jobType);
+
+            if (jobs.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(jobs);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+    }
+
+
 }
+
+
+
+
