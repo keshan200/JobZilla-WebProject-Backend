@@ -19,8 +19,20 @@ public interface JobRepository extends JpaRepository<Job, UUID>{
     List<Job> findAllJobsByJobId(@Param("jId") UUID jId);
 
 
-    @Query("SELECT j FROM Job j WHERE (:jobTitle IS NULL OR LOWER(j.jobTitle) LIKE LOWER(CONCAT('%', :jobTitle, '%'))) AND (:location IS NULL OR LOWER(j.location) LIKE LOWER(CONCAT('%', :location, '%'))) AND (:jobType IS NULL OR LOWER(j.jobType) LIKE LOWER(CONCAT('%', :jobType, '%')))")
-    List<Job> searchJobs(@Param("jobTitle") String jobTitle, @Param("location") String location, @Param("jobType") String jobType);
+    @Query("SELECT j FROM Job j WHERE " +
+            "(:country IS NULL OR LOWER(j.country) = LOWER(:country)) AND " +
+            "(:jobTitle IS NULL OR LOWER(j.jobTitle) = LOWER(:jobTitle)) AND " +
+            "(:jobType IS NULL OR LOWER(j.jobType) = LOWER(:jobType))")
+    List<Job> searchJobs(
+            @Param("country") String country,
+            @Param("jobTitle") String jobTitle,
+            @Param("jobType") String jobType
+    );
+
+
+    @Query("SELECT COUNT(j) FROM Job j WHERE j.company.cid = :companyId AND j.status = 'ACTIVE'")
+    int countActiveJobsByCompanyId(@Param("companyId") UUID companyId);
+
 
 
 

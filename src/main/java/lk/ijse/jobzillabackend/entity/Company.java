@@ -67,7 +67,7 @@ public class Company implements Serializable {
     @JsonManagedReference("company-socialMedia")
     private List<SocialMedia> socialMediaProfiles;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER )
     @JsonManagedReference("company-job")
     private List<Job> jobs;
 

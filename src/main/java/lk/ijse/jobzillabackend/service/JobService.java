@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.service;
 
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Job;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -18,5 +19,7 @@ public interface JobService {
 
     List<JobDTO> getJobsByJobId(UUID jobId);
 
-    List<JobDTO> searchJobs(String jobTitle, String location, String jobType);
+    List<JobDTO> searchJobs(String country, String jobTitle, String jobType);
+
+    int getActiveJobCountByCompanyId(UUID companyId);
 }

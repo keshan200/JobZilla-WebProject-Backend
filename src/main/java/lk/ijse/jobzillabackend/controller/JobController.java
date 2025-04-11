@@ -10,6 +10,8 @@ import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.service.JobService;
 import lk.ijse.jobzillabackend.service.impl.JobServiceImpl;
 import lk.ijse.jobzillabackend.util.VarList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,7 @@ import java.util.UUID;
 public class JobController {
 
     private final JobService jobService;
-
+    private static final Logger logger = LoggerFactory.getLogger(JobController.class);
     private final JobServiceImpl jobServiceImpl;
 
     public JobController(JobService jobService, JobServiceImpl jobServiceImpl) {
@@ -143,30 +145,47 @@ public class JobController {
 
 
 
+    @GetMapping("/search")
+    public ResponseEntity<ResponseDTO> searchJobs(
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String jobTitle,
+            @RequestParam(required = false) String jobType) {
 
-    @GetMapping("/searchJobs/{jobTitle}/{location}/{jobType}")
-    public ResponseEntity<List<JobDTO>> searchJobs(@PathVariable(required = false) String jobTitle,
-                                                   @PathVariable(required = false) String location,
-                                                   @PathVariable(required = false) String jobType) {
+        logger.info("Received search request with params - country: {}, jobTitle: {}, jobType: {}",
+                country, jobTitle, jobType);
+
+        List<JobDTO> jobDTOs = jobService.searchJobs(country, jobTitle, jobType);
+
+        logger.info("Search returned {} results", jobDTOs.size());
+
+        ResponseDTO response = new ResponseDTO();
+
+        if (jobDTOs.isEmpty()) {
+            response.setCode(HttpStatus.NOT_FOUND.value());
+            response.setMessage("No jobs found for the provided search criteria.");
+            response.setData(null);
+            logger.warn("No jobs found with the provided criteria");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        response.setCode(HttpStatus.OK.value());
+        response.setMessage("Jobs found successfully.");
+        response.setData(jobDTOs);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/job-count/{companyId}")
+    public ResponseEntity<Integer> getActiveJobCount(@PathVariable UUID companyId) {
         try {
-            System.out.println("Searching for jobs with parameters: jobTitle=" + jobTitle + ", location=" + location + ", jobType=" + jobType);
-
-            List<JobDTO> jobs = jobService.searchJobs(jobTitle, location, jobType);
-
-            if (jobs.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-            return ResponseEntity.ok(jobs);
-
+            int jobCount = jobService.getActiveJobCountByCompanyId(companyId);
+            System.out.println("Active Job Count for company " + companyId + ": " + jobCount);
+            return ResponseEntity.ok(jobCount);  // Should return the job count as the response body
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(new ArrayList<>());
+            e.printStackTrace();  // Log exception details
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);  // 400 Bad Request on failure
         }
     }
 
-
 }
-
 
 
 

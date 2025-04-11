@@ -94,7 +94,7 @@ public class WebSecurityConfig {
                                 "/api/v1/candidate/getAll",
                                 "/api/v1/candidate/getCandidateByCandId/{candId}",
                                 "/ws/**",
-                                "/api/v1/job/searchJobs/**"
+                                "/api/v1/job/search"
 
                         ).permitAll()
 
@@ -103,7 +103,8 @@ public class WebSecurityConfig {
                                          "/api/v1/company/register",
                                          "/api/v1/company/user/{userId}",
                                          "/api/v1/job/company/{companyId}",
-                                         "/api/v1/application/company/{companyId}"
+                                         "/api/v1/application/company/{companyId}",
+                                         "/api/v1/job/job-count/{companyId}"
                                          ).hasAuthority("EMPLOYER")
 
                         .requestMatchers(

@@ -16,9 +16,12 @@ import lk.ijse.jobzillabackend.service.QualificationService;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,7 +39,7 @@ public class JobServiceImpl implements JobService {
     private JobRepository jobRepository;
     @Autowired
     private CompanyRepository companyRepository;
-
+    private static final Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
 
     @Autowired
     private ModelMapper modelMapper;
@@ -173,19 +176,25 @@ public class JobServiceImpl implements JobService {
 
     @Override
     @Transactional
-    public List<JobDTO> searchJobs(String jobTitle, String location, String jobType) {
-
-
+    public List<JobDTO> searchJobs(String country, String jobTitle, String jobType) {
+        logger.info("Searching for jobs with country: {}, jobTitle: {}, jobType: {}", country, jobTitle, jobType);
         ObjectMapper objectMapper = new ObjectMapper();
-
-        List<Job> jobs = jobRepository.searchJobs(
-                (jobTitle != null && !jobTitle.isEmpty()) ? "%" + jobTitle + "%" : null,
-                (location != null && !location.isEmpty()) ? "%" + location + "%" : null,
-                (jobType != null && !jobType.isEmpty()) ? "%" + jobType + "%" : null
-        );
-
-        return jobs.stream()
+        return jobRepository.searchJobs(country, jobTitle, jobType)
+                .stream()
                 .map(job -> objectMapper.convertValue(job, JobDTO.class))
                 .collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public int getActiveJobCountByCompanyId(UUID companyId) {
+        try {
+            int count = jobRepository.countActiveJobsByCompanyId(companyId);
+            System.out.println("Active jobs count: " + count);
+            return count;
+        } catch (Exception e) {
+            return VarList.Internal_Server_Error;
+        }
     }
 }

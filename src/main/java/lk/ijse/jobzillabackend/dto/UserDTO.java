@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -36,6 +37,10 @@ public class UserDTO{
 
     private Status status ;
 
+
+    private List<MessageDTO> sentMessages;
+
+    private List<MessageDTO> receivedMessages;
 
     public UserDTO(UUID uid, String email, int mobile) {
         this.uid = uid;
