@@ -22,4 +22,6 @@ public interface JobService {
     List<JobDTO> searchJobs(String country, String jobTitle, String jobType);
 
     int getActiveJobCountByCompanyId(UUID companyId);
+
+
 }

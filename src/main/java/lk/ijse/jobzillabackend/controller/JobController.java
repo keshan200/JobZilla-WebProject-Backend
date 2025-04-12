@@ -173,17 +173,9 @@ public class JobController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/job-count/{companyId}")
-    public ResponseEntity<Integer> getActiveJobCount(@PathVariable UUID companyId) {
-        try {
-            int jobCount = jobService.getActiveJobCountByCompanyId(companyId);
-            System.out.println("Active Job Count for company " + companyId + ": " + jobCount);
-            return ResponseEntity.ok(jobCount);  // Should return the job count as the response body
-        } catch (Exception e) {
-            e.printStackTrace();  // Log exception details
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);  // 400 Bad Request on failure
-        }
-    }
+
+
+
 
 }
 

@@ -1,6 +1,7 @@
 package lk.ijse.jobzillabackend.service;
 
 import lk.ijse.jobzillabackend.dto.ApplicationDTO;
+import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Application;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,4 +15,6 @@ public interface ApplicationService {
     List<ApplicationDTO> getApplications();
 
     List<ApplicationDTO> getApplicationsByCompanyId(UUID companyId);
+    List<ApplicationDTO> getAppliedJobsByCandidateId(UUID candidateId);
+
 }

@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.repo;
 
+import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Job;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -32,6 +33,7 @@ public interface JobRepository extends JpaRepository<Job, UUID>{
 
     @Query("SELECT COUNT(j) FROM Job j WHERE j.company.cid = :companyId AND j.status = 'ACTIVE'")
     int countActiveJobsByCompanyId(@Param("companyId") UUID companyId);
+
 
 
 

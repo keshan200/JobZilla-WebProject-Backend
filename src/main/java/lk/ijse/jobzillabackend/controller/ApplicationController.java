@@ -87,4 +87,17 @@ public class ApplicationController {
         return ResponseEntity.ok(applicationDTOs);
     }
 
+    @GetMapping("/apply-jobs/{candidateId}")
+    public ResponseEntity<List<ApplicationDTO>> getAppliedJobsByCandidateId(@PathVariable UUID candidateId) {
+        try {
+            List<ApplicationDTO> appliedJobs = applicationService.getAppliedJobsByCandidateId(candidateId);
+            return ResponseEntity.ok(appliedJobs);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+
 }
+
+

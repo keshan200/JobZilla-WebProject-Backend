@@ -3,15 +3,15 @@ package lk.ijse.jobzillabackend.controller;
 import lk.ijse.jobzillabackend.dto.MessageDTO;
 import lk.ijse.jobzillabackend.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -36,5 +36,26 @@ public class ChatController {
                 messageDTO
         );
         return messageDTO;
+    }
+
+
+    @GetMapping("/receiver/{receiverId}")
+    public ResponseEntity<List<MessageDTO>> getMessagesByReceiverId(@PathVariable UUID receiverId) {
+        List<MessageDTO> messages = messageService.getMessagesByReceiverId(receiverId);
+        return ResponseEntity.ok(messages);
+    }
+
+
+    @GetMapping("/between/{senderId}/{receiverId}")
+    public ResponseEntity<List<MessageDTO>> getMessagesBetween(
+            @PathVariable UUID senderId,
+            @PathVariable UUID receiverId) {
+        List<MessageDTO> messages = messageService.getMessagesBetween(senderId, receiverId);
+
+        if (messages.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(messages);
     }
 }

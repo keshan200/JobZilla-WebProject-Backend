@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.ApplicationDTO;
 import lk.ijse.jobzillabackend.dto.CandidateDTO;
+import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Candidate;
@@ -117,5 +118,29 @@ public class ApplicationServiceImpl implements ApplicationService {
                 })
                 .collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional
+    public List<ApplicationDTO> getAppliedJobsByCandidateId(UUID candidateId) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Application> appliedJobs = applicationRepository.findAppliedJobsByCandidateId(candidateId);
+
+        return appliedJobs.stream()
+                .map(application -> {
+                    ApplicationDTO applicationDTO = objectMapper.convertValue(application, ApplicationDTO.class);
+                    JobDTO jobDTO = objectMapper.convertValue(application.getJob(), JobDTO.class);
+
+                    if (jobDTO.getCompany() != null) {
+                        CompanyDTO companyDTO = objectMapper.convertValue(jobDTO.getCompany(), CompanyDTO.class);
+                        jobDTO.setCompany(companyDTO);
+                    }
+
+                    applicationDTO.setJob(jobDTO);
+                    return applicationDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+
 
 }
