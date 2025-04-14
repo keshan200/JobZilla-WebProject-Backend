@@ -54,6 +54,8 @@ public class User{
 
 
 
+
+
     @OneToMany(mappedBy = "sender",fetch = FetchType.EAGER)
     @JsonManagedReference("sender-user")
     private List<Message> sentMessages;

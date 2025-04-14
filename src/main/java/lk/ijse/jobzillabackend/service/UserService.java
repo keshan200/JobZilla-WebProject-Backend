@@ -10,4 +10,5 @@ public interface UserService {
     int updateUser(UserDTO userDTO);
     int deleteUser(int id);
     List<UserDTO> getAll();
+
 }

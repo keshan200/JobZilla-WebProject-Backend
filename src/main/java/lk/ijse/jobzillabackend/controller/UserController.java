@@ -6,6 +6,7 @@ import lk.ijse.jobzillabackend.dto.AuthDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.email.EmailService;
+import lk.ijse.jobzillabackend.otp.OtpService;
 import lk.ijse.jobzillabackend.service.UserService;
 import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
@@ -26,14 +27,16 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
+    private final OtpService otpService;
 
 
 
-    public UserController(UserService userService, JwtUtil jwtUtil, EmailService emailService) {
+    public UserController(UserService userService, JwtUtil jwtUtil, EmailService emailService, OtpService otpService) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
 
         this.emailService = emailService;
+        this.otpService = otpService;
     }
 
     @PostMapping(value = "/register")
@@ -139,6 +142,8 @@ public class UserController {
 
         return ResponseEntity.ok(loggedInUserId);
     }
+
+
 
 
 

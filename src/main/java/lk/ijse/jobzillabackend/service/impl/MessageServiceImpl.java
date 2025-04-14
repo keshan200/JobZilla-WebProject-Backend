@@ -3,7 +3,7 @@ package lk.ijse.jobzillabackend.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
-import lk.ijse.jobzillabackend.dto.MessageDTO;
+import lk.ijse.jobzillabackend.dto.*;
 import lk.ijse.jobzillabackend.entity.Message;
 import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.repo.MessageRepository;
@@ -14,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class MessageServiceImpl implements MessageService {
-
 
 
     @Autowired
@@ -49,7 +50,6 @@ public class MessageServiceImpl implements MessageService {
     }
 
 
-
     @Override
     @Transactional
     public List<MessageDTO> getMessagesByReceiverId(UUID receiverId) {
@@ -61,8 +61,6 @@ public class MessageServiceImpl implements MessageService {
     }
 
 
-
-
     @Override
     @Transactional
     public List<MessageDTO> getMessagesBetween(UUID senderId, UUID receiverId) {
@@ -72,4 +70,9 @@ public class MessageServiceImpl implements MessageService {
                 .map(message -> objectMapper.convertValue(message, MessageDTO.class))
                 .collect(Collectors.toList());
     }
+
 }
+
+
+
+

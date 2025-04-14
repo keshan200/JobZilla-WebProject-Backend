@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lk.ijse.jobzillabackend.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +20,6 @@ public class MessageDTO {
     private User sender;
     private User receiver;
     private String sentAt;
+
 
 }

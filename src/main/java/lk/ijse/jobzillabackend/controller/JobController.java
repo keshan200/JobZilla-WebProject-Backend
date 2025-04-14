@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
+import lk.ijse.jobzillabackend.email.EmailService;
 import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.service.JobService;
 import lk.ijse.jobzillabackend.service.impl.JobServiceImpl;
@@ -29,10 +30,12 @@ public class JobController {
     private final JobService jobService;
     private static final Logger logger = LoggerFactory.getLogger(JobController.class);
     private final JobServiceImpl jobServiceImpl;
+    private final EmailService emailService;
 
-    public JobController(JobService jobService, JobServiceImpl jobServiceImpl) {
+    public JobController(JobService jobService, JobServiceImpl jobServiceImpl, EmailService emailService) {
         this.jobService = jobService;
         this.jobServiceImpl = jobServiceImpl;
+        this.emailService = emailService;
     }
 
 
@@ -48,6 +51,16 @@ public class JobController {
 
             switch (res){
                 case VarList.Created ->{
+
+
+                 emailService.   sendJobPostConfirmationEmail(
+                            jobDTO.getEmail(),
+                            jobDTO.getCompany().getCompany_name(),
+                            jobDTO.getJobTitle(),
+                            jobDTO.getJobTitle(),
+                            String.valueOf(jobDTO.getJobId())
+                    );
+
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created,"success",jobDTO));
                 }
@@ -176,6 +189,31 @@ public class JobController {
 
 
 
+
+
+    @GetMapping("/search-page")
+    public ResponseEntity<List<JobDTO>> searchJobs(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) List<String> type
+    ) {
+        List<JobDTO> jobs = jobService.searchJobs(category, keyword, location, type);
+        System.out.println("search"+jobs);
+
+
+
+        if (jobs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(jobs);
+        }
+        System.out.println("search>>>>>>>>>>>>>>>>>>>"+jobs);
+        System.out.println("Received category: " + category);
+        System.out.println("Received keyword: " + keyword);
+        System.out.println("Received location: " + location);
+        System.out.println("Received type: " + type);
+
+        return ResponseEntity.ok(jobs);
+    }
 
 }
 

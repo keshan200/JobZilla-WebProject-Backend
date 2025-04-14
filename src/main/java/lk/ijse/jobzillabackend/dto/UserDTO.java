@@ -1,6 +1,9 @@
 package lk.ijse.jobzillabackend.dto;
 
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.*;
+import lk.ijse.jobzillabackend.entity.Candidate;
+import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +39,9 @@ public class UserDTO{
     private String role;
 
     private Status status ;
+
+
+
 
 
     private List<MessageDTO> sentMessages;

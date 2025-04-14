@@ -185,8 +185,6 @@ public class JobServiceImpl implements JobService {
                 .collect(Collectors.toList());
     }
 
-
-
     @Override
     public int getActiveJobCountByCompanyId(UUID companyId) {
         try {
@@ -198,5 +196,35 @@ public class JobServiceImpl implements JobService {
         }
     }
 
+
+
+  /*  @Override
+    public int getActiveJobCountByCompanyId(UUID companyId) {
+        try {
+            int count = jobRepository.countActiveJobsByCompanyId(companyId);
+            System.out.println("Active jobs count: " + count);
+            return count;
+        } catch (Exception e) {
+            return VarList.Internal_Server_Error;
+        }
+    }*/
+
+
+
+
+    @Override
+    @Transactional
+    public List<JobDTO> searchJobs(String category, String keyword, String location, List<String> type) {
+
+        logger.info("Searching for jobs with country: {}, jobTitle: {}, jobType: {}", category, keyword, location,type);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Job> jobs = jobRepository.findJobsByJobsPage(category, keyword, location, type);
+        System.out.println("search2"+jobs);
+
+        return jobs.stream()
+                .map(job -> objectMapper.convertValue(job, JobDTO.class))
+                .collect(Collectors.toList());
+    }
 
 }

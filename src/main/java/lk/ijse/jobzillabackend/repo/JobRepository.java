@@ -36,6 +36,18 @@ public interface JobRepository extends JpaRepository<Job, UUID>{
 
 
 
+    @Query("SELECT j FROM Job j WHERE " +
+            "(:category IS NULL OR LOWER( j.jobCategory)LIKE CONCAT('%', LOWER(:category), '%')) AND " +
+            "(:keyword IS NULL OR LOWER(j.jobTitle) LIKE CONCAT('%', LOWER(:keyword), '%')) AND " +
+            "(:location IS NULL OR LOWER(j.location) LIKE CONCAT('%', LOWER(:location), '%')) AND " +
+            "(:type IS NULL OR j.jobType IN :type)")
+    List<Job> findJobsByJobsPage(
+            @Param("category") String category,
+            @Param("keyword") String keyword,
+            @Param("location") String location,
+            @Param("type") List<String> type
+    );
+
 
 
 

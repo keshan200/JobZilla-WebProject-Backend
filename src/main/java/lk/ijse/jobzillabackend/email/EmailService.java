@@ -3,6 +3,7 @@ package lk.ijse.jobzillabackend.email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -189,4 +190,103 @@ public class EmailService {
             System.err.println("Error sending email: " + e.getMessage());
         }
     }
+
+
+    public void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        mailSender.send(message);
+    }
+
+    public void sendJobPostConfirmationEmail(String toEmail, String userName, String jobTitle, String companyName, String jobId) {
+        String subject = "🎉 Your Job Posting is Live on JobZilla!";
+        String body = "<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <style>\n" +
+                "        body {\n" +
+                "            font-family: 'Arial', sans-serif;\n" +
+                "            line-height: 1.6;\n" +
+                "            color: #333333;\n" +
+                "            margin: 0;\n" +
+                "            padding: 0;\n" +
+                "        }\n" +
+                "        .container {\n" +
+                "            max-width: 600px;\n" +
+                "            margin: 0 auto;\n" +
+                "            padding: 20px;\n" +
+                "            background-color: #ffffff;\n" +
+                "        }\n" +
+                "        .header {\n" +
+                "            background-color: #0050a0;\n" +
+                "            color: #ffffff;\n" +
+                "            padding: 20px;\n" +
+                "            text-align: center;\n" +
+                "            border-radius: 5px 5px 0 0;\n" +
+                "        }\n" +
+                "        .content {\n" +
+                "            padding: 20px;\n" +
+                "            background-color: #f9f9f9;\n" +
+                "            border-left: 1px solid #e0e0e0;\n" +
+                "            border-right: 1px solid #e0e0e0;\n" +
+                "        }\n" +
+                "        .section {\n" +
+                "            margin-bottom: 20px;\n" +
+                "            background-color: #ffffff;\n" +
+                "            padding: 15px;\n" +
+                "            border-radius: 5px;\n" +
+                "            box-shadow: 0 2px 5px rgba(0,0,0,0.05);\n" +
+                "        }\n" +
+                "        .button {\n" +
+                "            display: inline-block;\n" +
+                "            background-color: #0050a0;\n" +
+                "            color: #ffffff;\n" +
+                "            padding: 10px 20px;\n" +
+                "            text-decoration: none;\n" +
+                "            border-radius: 4px;\n" +
+                "            font-weight: bold;\n" +
+                "            margin: 10px 0;\n" +
+                "        }\n" +
+                "        .footer {\n" +
+                "            background-color: #f0f0f0;\n" +
+                "            padding: 20px;\n" +
+                "            text-align: center;\n" +
+                "            font-size: 14px;\n" +
+                "            color: #666666;\n" +
+                "            border-radius: 0 0 5px 5px;\n" +
+                "        }\n" +
+                "    </style>\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "    <div class=\"container\">\n" +
+                "        <div class=\"header\">\n" +
+                "            <h1>Job Posted Successfully!</h1>\n" +
+                "        </div>\n" +
+                "        <div class=\"content\">\n" +
+                "            <p>Dear " + userName + ",</p>\n" +
+                "            <p>Thank you for posting a job on JobZilla. Your job listing is now live and available for candidates to view.</p>\n" +
+                "            \n" +
+                "            <div class=\"section\">\n" +
+                "                <p><strong>Job Title:</strong> " + jobTitle + "</p>\n" +
+                "                <p><strong>Company:</strong> " + companyName + "</p>\n" +
+                "                <p><strong>Job ID:</strong> " + jobId + "</p>\n" +
+                "            </div>\n" +
+                "            \n" +
+                "            <p>You can manage your job postings, edit details, or track applications from your dashboard.</p>\n" +
+                "            <a href=\"https://www.jobzilla.com/jobs/" + jobId + "\" class=\"button\">View Job Posting</a>\n" +
+                "            <a href=\"https://www.jobzilla.com/dashboard\" class=\"button\">Manage Jobs</a>\n" +
+                "        </div>\n" +
+                "        <div class=\"footer\">\n" +
+                "            <p>Thank you for choosing JobZilla. We’re here to help you find the best talent for your team!</p>\n" +
+                "            <p>JobZilla Team</p>\n" +
+                "        </div>\n" +
+                "    </div>\n" +
+                "</body>\n" +
+                "</html>";
+
+        sendHtmlEmail(toEmail, subject, body);
+    }
+
 }

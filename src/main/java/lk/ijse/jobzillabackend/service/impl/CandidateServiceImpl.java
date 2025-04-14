@@ -43,17 +43,6 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public int saveCandidate(CandidateDTO candidateDTO,MultipartFile file) {
 
-       /* if (candidateDTO.getCand_id() != null && candidateRepository.existsById(candidateDTO.getCand_id())) {
-            return VarList.Not_Acceptable;
-        }
-
-        userRepository.findById(candidateDTO.getUser().getUid())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        Candidate candidate = modelMapper.map(candidateDTO, Candidate.class);
-        candidateRepository.save(candidate);
-        return VarList.Created;*/
-
         if (candidateDTO.getCand_id() != null && candidateRepository.existsById(candidateDTO.getCand_id())) {
             return VarList.Not_Acceptable;
         }
@@ -61,7 +50,6 @@ public class CandidateServiceImpl implements CandidateService {
         userRepository.findById(candidateDTO.getUser().getUid())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Candidate candidate = modelMapper.map(candidateDTO, Candidate.class);
-
 
 
         if (file != null && !file.isEmpty()) {
@@ -94,16 +82,7 @@ public class CandidateServiceImpl implements CandidateService {
 
         Candidate existingCandidate = modelMapper.map(candidateDTO, Candidate.class);
 
-        if (file != null && !file.isEmpty()) {
-            try {
-                String fileName = candidateDTO.getUser().getUid() + "_" + file.getOriginalFilename();
-                String uploadDir = "candidates/" + candidateDTO.getUser().getUid();
-                FileUploadUtil.saveFile(uploadDir, fileName, file);
-                existingCandidate.setImg("uploads/" + uploadDir + "/" + fileName);
-            } catch (IOException e) {
-                throw new RuntimeException("File saving failed: " + e.getMessage());
-            }
-        }
+
         candidateRepository.save(existingCandidate);
         return VarList.Created;
     }
@@ -115,21 +94,6 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     @Transactional
-/*    public List<CandidateDTO> getAll() {
-        List<Candidate> candidates = candidateRepository.findAll();
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        return candidates.stream()
-                .map(candidate -> {
-                    CandidateDTO dto = objectMapper.convertValue(candidate, CandidateDTO.class);
-                    if (candidate.getImg() != null && !candidate.getImg().isEmpty()) {
-                        dto.setImg("http://localhost:8080/uploads/" + candidate.getImg());
-
-                    }
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }*/
     public List<CandidateDTO> getAll() {
         List<Candidate> candidates = candidateRepository.findAll();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -138,23 +102,19 @@ public class CandidateServiceImpl implements CandidateService {
                 .map(candidate -> {
                     CandidateDTO dto = objectMapper.convertValue(candidate, CandidateDTO.class);
 
-
                     if (candidate.getImg() != null && !candidate.getImg().isEmpty()) {
-                        try {
-                            String imagePath = "uploads/" + candidate.getImg();
-                            byte[] fileContent = Files.readAllBytes(Paths.get(imagePath));
-                            String encodedImage = Base64.getEncoder().encodeToString(fileContent);
-                            dto.setImg("data:image/jpeg;base64," + encodedImage);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        String imageUrl = "http://localhost:8080/uploads/" + candidate.getImg();
+                        dto.setImg(imageUrl);
                     }
 
                     return dto;
                 })
                 .collect(Collectors.toList());
     }
+
+
+
+
 
     @Override
     @Transactional

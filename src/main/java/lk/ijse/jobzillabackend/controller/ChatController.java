@@ -1,8 +1,12 @@
 package lk.ijse.jobzillabackend.controller;
 
 import lk.ijse.jobzillabackend.dto.MessageDTO;
+import lk.ijse.jobzillabackend.dto.ReceiverDTO;
+import lk.ijse.jobzillabackend.dto.UserDTO;
+import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -58,4 +62,9 @@ public class ChatController {
 
         return ResponseEntity.ok(messages);
     }
+
+
+
+
+
 }

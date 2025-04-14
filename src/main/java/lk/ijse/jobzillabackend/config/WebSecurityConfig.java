@@ -95,7 +95,8 @@ public class WebSecurityConfig {
                                 "/api/v1/candidate/getCandidateByCandId/{candId}",
                                 "/ws/**",
                                 "/api/v1/job/search",
-                                "/api/v1/message/between/{senderId}/{receiverId}"
+                                "/api/v1/message/between/{senderId}/{receiverId}",
+                                "/api/v1/job/search-page"
 
                         ).permitAll()
 
@@ -110,7 +111,8 @@ public class WebSecurityConfig {
 
                         .requestMatchers(
                                 "/api/v1/candidate/user/{userId}",
-                                "/api/v1/application/apply-jobs/{candidateId}"
+                                "/api/v1/application/apply-jobs/{candidateId}",
+                                "/api/v1/message/receivers/{senderId}"
                            ).hasAuthority("CANDIDATE")
 
 

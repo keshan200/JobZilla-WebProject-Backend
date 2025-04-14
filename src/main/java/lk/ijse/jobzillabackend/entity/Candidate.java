@@ -33,6 +33,8 @@ public class Candidate implements Serializable  {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID cand_id;
 
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String img;
 
     @Column(nullable = false)
