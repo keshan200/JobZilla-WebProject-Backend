@@ -1,5 +1,6 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.User;

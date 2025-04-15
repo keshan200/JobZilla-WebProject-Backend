@@ -4,6 +4,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
+import lk.ijse.jobzillabackend.entity.PasswordResetToken;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,7 +42,7 @@ public class UserDTO{
     private Status status ;
 
 
-
+    private List<PasswordResetTokenDTO>passwordResetToken;
 
 
     private List<MessageDTO> sentMessages;

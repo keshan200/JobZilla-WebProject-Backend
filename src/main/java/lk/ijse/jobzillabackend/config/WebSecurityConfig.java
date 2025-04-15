@@ -46,6 +46,8 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
@@ -96,7 +98,10 @@ public class WebSecurityConfig {
                                 "/ws/**",
                                 "/api/v1/job/search",
                                 "/api/v1/message/between/{senderId}/{receiverId}",
-                                "/api/v1/job/search-page"
+                                "/api/v1/job/search-page",
+                                "/auth/forgot-password/{email}",
+                                "/auth/reset-password"
+
 
                         ).permitAll()
 

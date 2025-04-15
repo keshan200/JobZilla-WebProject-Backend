@@ -216,9 +216,13 @@ public class JobServiceImpl implements JobService {
     @Transactional
     public List<JobDTO> searchJobs(String category, String keyword, String location, List<String> type) {
 
-        logger.info("Searching for jobs with country: {}, jobTitle: {}, jobType: {}", category, keyword, location,type);
-
         ObjectMapper objectMapper = new ObjectMapper();
+
+        if (type != null && type.isEmpty()) {
+            type = null;
+        }
+
+
         List<Job> jobs = jobRepository.findJobsByJobsPage(category, keyword, location, type);
         System.out.println("search2"+jobs);
 

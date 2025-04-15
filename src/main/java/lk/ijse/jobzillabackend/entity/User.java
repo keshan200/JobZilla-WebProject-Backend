@@ -66,7 +66,9 @@ public class User{
 
 
 
-
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @JsonManagedReference("passwordResetToken-user")
+    private List<PasswordResetToken>passwordResetToken;
 
     @PrePersist
     public void prePersist() {

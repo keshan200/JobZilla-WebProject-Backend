@@ -196,7 +196,7 @@ public class JobController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) String location,
-            @RequestParam(required = false) List<String> type
+            @RequestParam(required = false) List <String> type
     ) {
         List<JobDTO> jobs = jobService.searchJobs(category, keyword, location, type);
         System.out.println("search"+jobs);
