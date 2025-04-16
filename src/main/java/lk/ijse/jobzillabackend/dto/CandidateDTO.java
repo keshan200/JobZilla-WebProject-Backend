@@ -56,7 +56,7 @@ public class CandidateDTO {
 
     private List<String> skills = new ArrayList<>();
 
-
+    private String position;
 
 
     private UserDTO user;

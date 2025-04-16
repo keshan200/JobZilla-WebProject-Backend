@@ -59,11 +59,14 @@ public class Candidate implements Serializable  {
     @Column(nullable = false)
     private String full_address;
 
-    @Column(nullable = false)
+    @Lob
+    @Column(nullable = false,columnDefinition = "TEXT")
     private String description;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> skills = new ArrayList<>();
+
+    private String position;
 
 
     @OneToOne

@@ -52,7 +52,7 @@ public class CompanyDTO {
     private String est_since;
 
 
-
+    private String company_type;
 
 
     private UserDTO user;

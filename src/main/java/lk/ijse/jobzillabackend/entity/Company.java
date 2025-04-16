@@ -57,6 +57,8 @@ public class Company implements Serializable {
     @Column(nullable = false)
     private String est_since;
 
+    @Column(nullable = false)
+    private String company_type;
 
 
     @OneToOne
