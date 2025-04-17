@@ -29,8 +29,8 @@ public class SocialMedia implements Serializable {
     private String url;
 
     @ManyToOne
-    @JoinColumn(name = "company_id",referencedColumnName = "cid", nullable = false)
-    @JsonBackReference("company-socialMedia")
-    private Company company;
+    @JoinColumn(name = "user_id",referencedColumnName = "uid")
+    @JsonBackReference("user-socialMedia")
+    private User user;
 
 }

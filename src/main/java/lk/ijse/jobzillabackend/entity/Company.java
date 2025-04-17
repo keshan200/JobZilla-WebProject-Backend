@@ -65,9 +65,6 @@ public class Company implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "uid")
     private User user;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference("company-socialMedia")
-    private List<SocialMedia> socialMediaProfiles;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER )
     @JsonManagedReference("company-job")

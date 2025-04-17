@@ -6,7 +6,9 @@ import lk.ijse.jobzillabackend.dto.SocialMediaDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.SocialMedia;
+import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.repo.SocialMediaRepository;
+import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.SocialMediaService;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.modelmapper.ModelMapper;
@@ -24,20 +26,29 @@ public class SocialMediaImpl implements SocialMediaService {
     SocialMediaRepository socialMediaRepository;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
 
 
     @Override
     public int saveSocialMedia(SocialMediaDTO socialMediaDTO) {
-      if (socialMediaRepository.existsById(socialMediaDTO.getSid())){
-          System.out.println(socialMediaDTO.getSid());
-          return VarList.Not_Acceptable;
-      }else {
-          socialMediaRepository.save(modelMapper.map(socialMediaDTO, SocialMedia.class));
-          System.out.println(socialMediaDTO.getSid());
-          return VarList.Created;
-      }
+        if (socialMediaRepository.existsById(socialMediaDTO.getSid())) {
+            System.out.println("Social Media entry already exists with ID: " + socialMediaDTO.getSid());
+            return VarList.Not_Acceptable;
+        } else {
+            SocialMedia socialMedia = modelMapper.map(socialMediaDTO, SocialMedia.class);
+
+            User user = userRepository.findById(socialMediaDTO.getUser().getUid())
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + socialMediaDTO.getUser().getUid()));
+            socialMedia.setUser(user);
+
+            socialMediaRepository.save(socialMedia);
+            System.out.println("Saved Social Media with ID: " + socialMedia.getSid());
+            return VarList.Created;
+        }
     }
 
     @Override

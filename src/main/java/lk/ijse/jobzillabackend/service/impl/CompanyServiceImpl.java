@@ -99,9 +99,6 @@ public class CompanyServiceImpl implements CompanyService{
         if (companyDto.getImage_collection() == null) {
             companyDto.setImage_collection(new ArrayList<>());
         }
-        if (companyDto.getSocialMediaProfiles() == null) {
-            companyDto.setSocialMediaProfiles(new ArrayList<>());
-        }
 
         userRepository.findById(companyDto.getUser().getUid())
                 .orElseThrow(() -> new RuntimeException("User Account not found"));
@@ -110,7 +107,7 @@ public class CompanyServiceImpl implements CompanyService{
                 .orElseThrow(() -> new RuntimeException("Company not found"));
 
         existingCompany.getImage_collection().clear();
-        existingCompany.getSocialMediaProfiles().clear();
+
 
         modelMapper.map(companyDto, existingCompany);
 

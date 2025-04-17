@@ -58,8 +58,6 @@ public class CompanyDTO {
     private UserDTO user;
 
 
-    private List<SocialMediaDTO> socialMediaProfiles;
-
 
     private List<JobDTO> jobs;
 

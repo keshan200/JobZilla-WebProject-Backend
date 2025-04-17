@@ -70,6 +70,12 @@ public class User{
     @JsonManagedReference("passwordResetToken-user")
     private List<PasswordResetToken>passwordResetToken;
 
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "user")
+    @JsonManagedReference("user-socialMedia")
+    private List<SocialMedia>socialMedia;
+
+
     @PrePersist
     public void prePersist() {
         if (status == null) {

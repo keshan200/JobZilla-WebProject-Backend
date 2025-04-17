@@ -57,7 +57,7 @@ public class Application implements Serializable {
     @JsonBackReference("job-application")
     private Job job;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "candidate_id")
     @JsonBackReference("candidate-application")
     private Candidate candidate;

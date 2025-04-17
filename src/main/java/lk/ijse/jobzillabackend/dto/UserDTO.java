@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.PasswordResetToken;
+import lk.ijse.jobzillabackend.entity.SocialMedia;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,6 +49,8 @@ public class UserDTO{
     private List<MessageDTO> sentMessages;
 
     private List<MessageDTO> receivedMessages;
+
+    private List<SocialMedia>socialMedia;
 
     public UserDTO(UUID uid, String email, int mobile) {
         this.uid = uid;

@@ -60,7 +60,7 @@ public class UserController {
 
                     System.out.println("Refresh Token: " + refreshToken);
 
-                    emailService.sendWelcomeEmail(userDTO.getEmail(),userDTO.getUsername());
+
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created, "Success", authDTO));
 

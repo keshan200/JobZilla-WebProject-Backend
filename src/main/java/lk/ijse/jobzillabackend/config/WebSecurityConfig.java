@@ -93,6 +93,7 @@ public class WebSecurityConfig {
                                 "/uploads/**",
                                 "/api/v1/company/all/{cid}",
                                 "/api/v1/job/getJobsByJobId/{jobId}",
+                                "/api/v1/socialMedia/save",
                                 "/api/v1/candidate/getAll",
                                 "/api/v1/candidate/getCandidateByCandId/{candId}",
                                 "/ws/**",

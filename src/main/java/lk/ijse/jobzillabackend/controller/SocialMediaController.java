@@ -32,8 +32,6 @@ public class SocialMediaController {
 
     }
 
-
-    @PreAuthorize("hasAuthority('EMPLOYER')")
     @PostMapping("/save")
     public ResponseEntity<ResponseDTO> saveSocialMedia(@RequestBody @Valid SocialMediaDTO socialMediaDTO) {
 

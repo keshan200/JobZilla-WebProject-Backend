@@ -27,5 +27,5 @@ public class SocialMediaDTO {
     private String url;
 
 
-    private CompanyDTO company;
+    private UserDTO user;
 }
