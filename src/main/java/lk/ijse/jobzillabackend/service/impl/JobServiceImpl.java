@@ -7,8 +7,10 @@ import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
+import lk.ijse.jobzillabackend.entity.JobCategory;
 import lk.ijse.jobzillabackend.entity.Qualification;
 import lk.ijse.jobzillabackend.repo.CompanyRepository;
+import lk.ijse.jobzillabackend.repo.JobCategoryRepository;
 import lk.ijse.jobzillabackend.repo.JobRepository;
 import lk.ijse.jobzillabackend.sepecifications.JobSpecifications;
 import lk.ijse.jobzillabackend.service.JobService;
@@ -39,6 +41,12 @@ public class JobServiceImpl implements JobService {
     private JobRepository jobRepository;
 
     @Autowired
+    private JobCategoryRepository jobCategoryRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
@@ -50,14 +58,34 @@ public class JobServiceImpl implements JobService {
         try {
             if (jobDTO.getJobId() != null && jobRepository.existsById(jobDTO.getJobId())) {
                 return VarList.Not_Acceptable;
-            } else {
-                jobRepository.save(modelMapper.map(jobDTO, Job.class));
-                return VarList.Created;
             }
+
+            JobCategory jobCategory = jobCategoryRepository.findById(jobDTO.getJobCategory().getJobCatId())
+                    .orElseThrow(() -> new IllegalArgumentException("Job category not found with ID: " + jobDTO.getJobCategory().getJobCatId()));
+
+            Company company = companyRepository.findById(jobDTO.getCompany().getCid())
+                    .orElseThrow(() -> new IllegalArgumentException("Company not found with ID: " + jobDTO.getCompany().getCid()));
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            Job job = objectMapper.convertValue(jobDTO, Job.class);
+
+            job.setCompany(company);
+            job.setJobCategory(jobCategory);
+
+            jobRepository.save(job);
+
+            return VarList.Created;
+        } catch (IllegalArgumentException e) {
+
+            System.err.println("Validation Error: " + e.getMessage());
+            return VarList.Not_Acceptable;
         } catch (Exception e) {
+            e.printStackTrace();
             return VarList.Internal_Server_Error;
         }
     }
+
+
 
     @Override
     public int updateJob(JobDTO jobDTO) {

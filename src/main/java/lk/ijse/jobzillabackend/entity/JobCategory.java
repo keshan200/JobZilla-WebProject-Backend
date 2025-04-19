@@ -29,7 +29,7 @@ public class JobCategory implements Serializable {
     private String jobCatName;
 
 
-    @OneToMany(mappedBy = "jobCategories", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "jobCategory", cascade = CascadeType.ALL)
     @JsonManagedReference("jobCategory-job")
     private List<Job> jobs = new ArrayList<>();
 

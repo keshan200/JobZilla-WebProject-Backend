@@ -112,7 +112,8 @@ public class WebSecurityConfig {
                                          "/api/v1/company/user/{userId}",
                                          "/api/v1/job/company/{companyId}",
                                          "/api/v1/application/company/{companyId}",
-                                         "/api/v1/job/job-count/{companyId}"
+                                         "/api/v1/job/job-count/{companyId}",
+                                         "/api/v1/jobCategory/getAll"
                                          ).hasAuthority("EMPLOYER")
 
                         .requestMatchers(
@@ -123,7 +124,8 @@ public class WebSecurityConfig {
 
 
                         .requestMatchers(
-                                "/api/v1/jobCategory/save"
+                                "/api/v1/jobCategory/save",
+                                "/api/v1/jobCategory/getAll"
                         ).hasAuthority("ADMIN")
 
 

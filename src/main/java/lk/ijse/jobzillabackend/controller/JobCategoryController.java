@@ -2,6 +2,7 @@ package lk.ijse.jobzillabackend.controller;
 
 
 import jakarta.validation.Valid;
+import lk.ijse.jobzillabackend.dto.CandidateDTO;
 import lk.ijse.jobzillabackend.dto.JobCategoryDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.service.JobCategoryService;
@@ -9,6 +10,8 @@ import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/jobCategory")
@@ -51,7 +54,24 @@ public class JobCategoryController {
                     .body(new ResponseDTO(500, "Internal server error", e.getMessage()));
         }
 
-
-
     }
+
+
+
+
+    @GetMapping(value = "getAll")
+    public List<JobCategoryDTO> getAllUsers() {
+        try {
+            return jobCategoryService.getAllJobCategory();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+
+
+
 }

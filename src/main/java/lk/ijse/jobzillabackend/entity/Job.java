@@ -38,9 +38,6 @@ public class Job implements Serializable {
     private String jobTitle;
 
     @Column(nullable = false)
-    private String jobCategory;
-
-    @Column(nullable = false)
     private String jobType;
 
     private String offeredSalary;
@@ -114,8 +111,8 @@ public class Job implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference("jobCategory-job")
-    @JoinColumn(name = "category_id", referencedColumnName = "jobCatId", nullable = false)
-    private JobCategory jobCategories;
+    @JoinColumn(name = "category_id", referencedColumnName = "jobCatId")
+    private JobCategory jobCategory;
 }
 
 

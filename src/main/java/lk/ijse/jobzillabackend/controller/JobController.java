@@ -53,14 +53,6 @@ public class JobController {
                 case VarList.Created ->{
 
 
-                 emailService.   sendJobPostConfirmationEmail(
-                            jobDTO.getEmail(),
-                            jobDTO.getCompany().getCompany_name(),
-                            jobDTO.getJobTitle(),
-                            jobDTO.getJobTitle(),
-                            String.valueOf(jobDTO.getJobId())
-                    );
-
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created,"success",jobDTO));
                 }

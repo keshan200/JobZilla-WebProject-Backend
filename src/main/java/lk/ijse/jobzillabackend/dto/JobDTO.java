@@ -32,10 +32,6 @@ public class JobDTO {
     @Size(max = 100, message = "Job title must not exceed 100 characters")
     private String jobTitle;
 
-    @NotBlank(message = "Job category is required")
-    @Size(max = 50, message = "Job category must not exceed 50 characters")
-    private String jobCategory;
-
     @NotBlank(message = "Job type is required")
  /*   @Pattern(regexp = "Full-Time|Part-Time|Contract|Freelance", message = "Invalid job type")*/
     private String jobType;
@@ -101,7 +97,7 @@ public class JobDTO {
 
     private List<ApplicationDTO> applications;
 
-    private JobCategoryDTO jobCategories;
+    private JobCategoryDTO jobCategory;
 
 
 }

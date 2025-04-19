@@ -1,7 +1,10 @@
 package lk.ijse.jobzillabackend.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
+import lk.ijse.jobzillabackend.dto.CompanyDTO;
 import lk.ijse.jobzillabackend.dto.JobCategoryDTO;
+import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Job;
 import lk.ijse.jobzillabackend.entity.JobCategory;
 import lk.ijse.jobzillabackend.repo.JobCategoryRepository;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -55,8 +59,22 @@ public class JobCategoryServiceImpl implements JobCategoryService {
     }
 
     @Override
+    @Transactional
     public List<JobCategoryDTO> getAllJobCategory() {
-        return List.of();
+        List<JobCategory> jobCategories = jobCategoryRepository.findAll();
+
+        return jobCategories.stream()
+                .map(jobCategory -> {
+                    JobCategoryDTO jobCategoryDTO = objectMapper.convertValue(jobCategory, JobCategoryDTO.class);
+                    if (jobCategory != null && jobCategory.getJobs() != null) {
+                        List<JobDTO> jobDTOs = jobCategory.getJobs().stream()
+                                .map(job -> objectMapper.convertValue(job, JobDTO.class))
+                                .collect(Collectors.toList());
+                        jobCategoryDTO.setJobs(jobDTOs);
+                    }
+                    return jobCategoryDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
