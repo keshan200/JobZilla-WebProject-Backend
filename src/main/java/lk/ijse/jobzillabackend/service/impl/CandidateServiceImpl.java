@@ -63,7 +63,8 @@ public class CandidateServiceImpl implements CandidateService {
                 throw new RuntimeException("File saving failed: " + e.getMessage());
             }
         }
-        candidateRepository.save(candidate);
+        Candidate saveCandidate = candidateRepository.save(candidate);
+        candidateDTO.setImg(saveCandidate.getImg());
         return VarList.Created;
     }
 

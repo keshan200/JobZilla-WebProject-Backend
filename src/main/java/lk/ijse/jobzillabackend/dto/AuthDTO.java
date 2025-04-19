@@ -18,6 +18,7 @@ public class AuthDTO {
     private String token;
     private String refreshToken;
     private String name;
+    private String img;
 
     private UUID company;
 

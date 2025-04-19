@@ -2,11 +2,14 @@ package lk.ijse.jobzillabackend.controller;
 
 import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.AuthDTO;
+import lk.ijse.jobzillabackend.dto.CandidateDTO;
 import lk.ijse.jobzillabackend.dto.ResponseDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
+import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.enums.Status;
+import lk.ijse.jobzillabackend.service.CandidateService;
 import lk.ijse.jobzillabackend.service.impl.UserServiceImpl;
 import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
@@ -21,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -32,15 +36,17 @@ public class AuthController {
 
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+    private final CandidateService candidateService;
     private final UserServiceImpl userService;
     private final ResponseDTO responseDTO;
     private final PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
 
 
-    public AuthController(JwtUtil jwtUtil, AuthenticationManager authenticationManager, UserServiceImpl userService, ResponseDTO responseDTO, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
+    public AuthController(JwtUtil jwtUtil, AuthenticationManager authenticationManager, CandidateService candidateService, UserServiceImpl userService, ResponseDTO responseDTO, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.candidateService = candidateService;
         this.userService = userService;
         this.responseDTO = responseDTO;
         this.passwordEncoder = passwordEncoder;
@@ -78,12 +84,19 @@ public class AuthController {
                     .body(new ResponseDTO(VarList.Forbidden, "Your account is suspended. Please contact support.", null));
         }
 
+        List<CandidateDTO> candidateDTOList = candidateService.getCandidateByUserId(user.getUid());
+        String img = "default/non-profile.png";
+        if (candidateDTOList != null && !candidateDTOList.isEmpty()) {
+            img = candidateDTOList.get(0).getImg();
+        }
+
         AuthDTO authDTO = new AuthDTO();
         authDTO.setEmail(user.getEmail());
         authDTO.setRole(user.getRole());
         authDTO.setToken(token);
         authDTO.setId(user.getUid());
         authDTO.setName(user.getUsername());
+        authDTO.setImg(img);
         authDTO.setRefreshToken(refreshToken);
 
 
