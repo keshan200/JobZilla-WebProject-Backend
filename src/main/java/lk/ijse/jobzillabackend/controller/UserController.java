@@ -8,6 +8,7 @@ import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.email.EmailService;
 
 import lk.ijse.jobzillabackend.service.UserService;
+import lk.ijse.jobzillabackend.service.impl.UserServiceImpl;
 import lk.ijse.jobzillabackend.util.JwtUtil;
 import lk.ijse.jobzillabackend.util.VarList;
 import org.springframework.http.HttpStatus;
@@ -27,17 +28,20 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
+    private final UserServiceImpl userServiceImpl;
 
 
 
 
-    public UserController(UserService userService, JwtUtil jwtUtil, EmailService emailService) {
+    public UserController(UserService userService, JwtUtil jwtUtil, EmailService emailService, UserServiceImpl userServiceImpl) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
 
         this.emailService = emailService;
 
+        this.userServiceImpl = userServiceImpl;
     }
+
 
     @PostMapping(value = "/register")
     public ResponseEntity<ResponseDTO> registerUser(@RequestBody @Valid UserDTO userDTO) {

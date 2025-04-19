@@ -1,9 +1,12 @@
 package lk.ijse.jobzillabackend.service.impl;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.User;
+import lk.ijse.jobzillabackend.enums.Status;
+import lk.ijse.jobzillabackend.enums.UserRole;
 import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.UserService;
 import lk.ijse.jobzillabackend.util.VarList;
@@ -37,6 +40,7 @@ public class UserServiceImpl  implements UserService , UserDetailsService {
 
 
 
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
@@ -64,10 +68,37 @@ public class UserServiceImpl  implements UserService , UserDetailsService {
 
             userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
             userRepository.save(modelMapper.map(userDTO, User.class));
+            createDefaultAdmin();
             return VarList.Created;
         }
 
     }
+
+    @Transactional
+    public void createDefaultAdmin() {
+        String adminEmail = "ad@gmail.com";
+        if (!userRepository.existsByEmail(adminEmail)) {
+            try {
+                User admin = new User();
+                admin.setEmail(adminEmail);
+                admin.setPassword(new BCryptPasswordEncoder().encode("Admin@123"));
+                admin.setUsername("Admin");
+                admin.setMobile(1234567890);
+                admin.setRole(UserRole.ADMIN);
+
+                userRepository.save(admin);
+                System.out.println("Default admin account created.");
+            } catch (Exception e) {
+                System.err.println("Error creating default admin: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Default admin account already exists.");
+        }
+    }
+
+
+
 
     @Override
     public int updateUser(UserDTO userDTO) {

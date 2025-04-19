@@ -34,6 +34,9 @@ public class CandidateController {
         this.candidateService = candidateService;
     }
 
+
+
+
     @PostMapping(value = "/register" ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAnyAuthority('CANDIDATE')")
     public ResponseEntity<ResponseDTO> saveCandidate(

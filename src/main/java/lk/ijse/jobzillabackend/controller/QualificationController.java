@@ -31,11 +31,6 @@ public class QualificationController {
     @PreAuthorize("hasAnyAuthority('CANDIDATE')")
     public ResponseEntity<ResponseDTO> addQualifications(@RequestBody @Valid QualificationDTO qualificationDTO) {
 
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.: " + qualificationDTO);
-
-        System.out.println("Qualification DTO: " + qualificationDTO);
-
-
         try {
             int response = qualificationService.saveQualification(qualificationDTO);
 

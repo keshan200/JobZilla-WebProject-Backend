@@ -2,7 +2,10 @@ package lk.ijse.jobzillabackend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lk.ijse.jobzillabackend.service.UserService;
+import lk.ijse.jobzillabackend.service.impl.UserServiceImpl;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +27,8 @@ public class JobZillaBackendApplication {
 		return new ModelMapper();
 
 	}
+
+
 
 
 

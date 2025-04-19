@@ -50,14 +50,10 @@ public class CompanyController {
             ObjectMapper objectMapper = new ObjectMapper();
             CompanyDTO companyDTO = objectMapper.readValue(companyData, CompanyDTO.class);
 
-
-
             int result = companyService.saveCompany(companyDTO, files);
 
             switch (result) {
                 case VarList.Created -> {
-
-
 
                     return ResponseEntity.status(HttpStatus.CREATED)
                             .body(new ResponseDTO(VarList.Created, "Company created successfully", companyDTO));

@@ -122,8 +122,17 @@ public class WebSecurityConfig {
                            ).hasAuthority("CANDIDATE")
 
 
-                        .requestMatchers("/api/v1/job/save","/api/v1/job/post-job").hasAuthority("EMPLOYER")
+                        .requestMatchers(
+                                "/api/v1/jobCategory/save"
+                        ).hasAuthority("ADMIN")
+
+
+                        .requestMatchers("/api/v1/job/save","/api/v1/job/post-job")
+                        .hasAuthority("EMPLOYER")
                         .anyRequest().authenticated()
+
+
+
 
 
                 )

@@ -37,12 +37,11 @@ public class JobServiceImpl implements JobService {
 
     @Autowired
     private JobRepository jobRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
-    private static final Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
 
     @Autowired
     private ModelMapper modelMapper;
+
+    private static final Logger logger = LoggerFactory.getLogger(JobServiceImpl.class);
 
 
 

@@ -8,6 +8,7 @@ import jdk.jfr.Category;
 import lk.ijse.jobzillabackend.entity.Application;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
+import lk.ijse.jobzillabackend.entity.JobCategory;
 import lk.ijse.jobzillabackend.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -96,12 +97,11 @@ public class JobDTO {
 
     private List<String> requirements = new ArrayList<>();
 
-
-
-
     private CompanyDTO company;
 
     private List<ApplicationDTO> applications;
+
+    private JobCategoryDTO jobCategories;
 
 
 }

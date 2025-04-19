@@ -46,6 +46,14 @@ public class RoleBasedEmailValidator implements ConstraintValidator<ValidRoleBas
             return isValidCandidate;
         }
 
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            boolean isValidCandidate = personalDomains.stream().anyMatch(email::endsWith);
+            System.out.println("ADMIN email validation result: " + isValidCandidate);
+            return isValidCandidate;
+        }
+
+
+
         System.out.println("Validation failed: Role not matched");
         return false;
     }

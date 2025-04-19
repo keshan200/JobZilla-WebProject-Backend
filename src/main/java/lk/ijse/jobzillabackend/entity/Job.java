@@ -111,6 +111,11 @@ public class Job implements Serializable {
     @OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
     @JsonManagedReference("job-application")
     private List<Application> applications;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference("jobCategory-job")
+    @JoinColumn(name = "category_id", referencedColumnName = "jobCatId", nullable = false)
+    private JobCategory jobCategories;
 }
 
 
