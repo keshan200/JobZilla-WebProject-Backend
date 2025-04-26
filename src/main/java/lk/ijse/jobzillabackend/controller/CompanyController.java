@@ -186,6 +186,19 @@ public class CompanyController {
     }
 
 
+    @GetMapping("/count")
+    public ResponseEntity<ResponseDTO>getActiveCompanyCount(){
+        try {
+            long active = companyService.countActiveCompany();
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseDTO(VarList.Created,"Sucsess",active));
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 
 }
 

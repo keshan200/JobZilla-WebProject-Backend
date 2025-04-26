@@ -8,6 +8,7 @@ import lk.ijse.jobzillabackend.dto.SocialMediaDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
+import lk.ijse.jobzillabackend.enums.Status;
 import lk.ijse.jobzillabackend.repo.CompanyRepository;
 import lk.ijse.jobzillabackend.repo.JobRepository;
 import lk.ijse.jobzillabackend.repo.UserRepository;
@@ -195,6 +196,16 @@ public class CompanyServiceImpl implements CompanyService{
     public UUID getCompanyID(UUID id) {
         Company company = companyRepository.findByCid(id).orElseThrow(() -> new RuntimeException("Company not found"));
         return company.getCid();
+    }
+
+    @Override
+    public long countActiveCompany() {
+     try {
+         long active = companyRepository.countByUserStatus(Status.ACTIVE);
+         return active;
+     } catch (RuntimeException e) {
+         throw new RuntimeException(e);
+     }
     }
 
 

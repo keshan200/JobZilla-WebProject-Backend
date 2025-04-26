@@ -92,16 +92,22 @@ public class WebSecurityConfig {
                                 "/api/v1/application/getAll",
                                 "/uploads/**",
                                 "/api/v1/company/all/{cid}",
+                                "/api/v1/company/count",
                                 "/api/v1/job/getJobsByJobId/{jobId}",
+                                "/api/v1/job/count",
                                 "/api/v1/socialMedia/save",
                                 "/api/v1/candidate/getAll",
+                                "/api/v1/candidate/count",
                                 "/api/v1/candidate/getCandidateByCandId/{candId}",
                                 "/ws/**",
                                 "/api/v1/job/search",
                                 "/api/v1/message/between/{senderId}/{receiverId}",
                                 "/api/v1/job/search-page",
                                 "/auth/forgot-password/{email}",
-                                "/auth/reset-password"
+                                "/auth/reset-password",
+
+
+                                "api/v1/message/receiver-details/{senderId}"
 
 
                         ).permitAll()

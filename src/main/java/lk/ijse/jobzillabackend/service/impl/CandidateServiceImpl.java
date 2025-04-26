@@ -8,6 +8,7 @@ import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.Job;
+import lk.ijse.jobzillabackend.enums.Status;
 import lk.ijse.jobzillabackend.repo.CandidateRepository;
 import lk.ijse.jobzillabackend.repo.UserRepository;
 import lk.ijse.jobzillabackend.service.CandidateService;
@@ -38,6 +39,11 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Autowired
     private UserRepository userRepository;
+
+
+
+
+
 
 
     @Override
@@ -142,6 +148,16 @@ public class CandidateServiceImpl implements CandidateService {
         return candidates.stream()
                 .map(candidate -> objectMapper.convertValue(candidate, CandidateDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public long activeCandidatesCount() {
+        try{
+            long candiates = candidateRepository.countByUserStatus(Status.ACTIVE);
+            return candiates;
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

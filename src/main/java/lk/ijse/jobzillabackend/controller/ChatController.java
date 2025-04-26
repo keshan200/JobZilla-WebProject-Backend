@@ -1,8 +1,6 @@
 package lk.ijse.jobzillabackend.controller;
 
-import lk.ijse.jobzillabackend.dto.MessageDTO;
-import lk.ijse.jobzillabackend.dto.ReceiverDTO;
-import lk.ijse.jobzillabackend.dto.UserDTO;
+import lk.ijse.jobzillabackend.dto.*;
 import lk.ijse.jobzillabackend.entity.User;
 import lk.ijse.jobzillabackend.service.MessageService;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +62,18 @@ public class ChatController {
     }
 
 
+    @GetMapping("/receiver-details/{senderId}")
+    public ResponseEntity<List<ReceiverInfo>> getAllDistinctReceivers(@PathVariable UUID senderId) {
 
+        List<ReceiverInfo> receivers = messageService.getAllDistinctReceiversBySenderId(senderId);
 
+        System.out.println(receivers);
 
+        if (receivers.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(receivers);
+    }
 }
+
+

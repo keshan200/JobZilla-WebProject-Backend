@@ -3,6 +3,7 @@ package lk.ijse.jobzillabackend.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lk.ijse.jobzillabackend.dto.CompanyDTO;
+import lk.ijse.jobzillabackend.dto.JobCategoryDTO;
 import lk.ijse.jobzillabackend.dto.JobDTO;
 import lk.ijse.jobzillabackend.dto.UserDTO;
 import lk.ijse.jobzillabackend.entity.Company;
@@ -27,10 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -181,6 +179,9 @@ public class JobServiceImpl implements JobService {
                 .toList();
     }
 
+
+
+
     @Override
     @Transactional
     public List<JobDTO> getJobsByJobId(UUID jobId) {
@@ -197,7 +198,6 @@ public class JobServiceImpl implements JobService {
                 })
                 .toList();
     }
-
 
 
 
@@ -225,37 +225,46 @@ public class JobServiceImpl implements JobService {
 
 
 
-  /*  @Override
-    public int getActiveJobCountByCompanyId(UUID companyId) {
-        try {
-            int count = jobRepository.countActiveJobsByCompanyId(companyId);
-            System.out.println("Active jobs count: " + count);
-            return count;
-        } catch (Exception e) {
-            return VarList.Internal_Server_Error;
-        }
-    }*/
-
-
-
-
     @Override
     @Transactional
     public List<JobDTO> searchJobs(String category, String keyword, String location, List<String> type) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
         if (type != null && type.isEmpty()) {
-            type = null;
+            type = null; 
         }
 
-
         List<Job> jobs = jobRepository.findJobsByJobsPage(category, keyword, location, type);
-        System.out.println("search2"+jobs);
 
+        if (jobs.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
         return jobs.stream()
-                .map(job -> objectMapper.convertValue(job, JobDTO.class))
+                .map(job -> {
+                    JobDTO jobDTO = objectMapper.convertValue(job, JobDTO.class);
+                    if (job.getCompany() != null) {
+                        jobDTO.setCompany(objectMapper.convertValue(job.getCompany(), CompanyDTO.class));
+                    }
+                    return jobDTO;
+                })
                 .collect(Collectors.toList());
+
+    }
+
+
+
+    @Override
+    public long activejobCount() {
+
+        try{
+            long activeCount = jobRepository.countActiveJobs();
+          /*  System.out.println("Active jobs count: " + activeCount);*/
+            return activeCount;
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

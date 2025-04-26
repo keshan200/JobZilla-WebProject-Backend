@@ -142,7 +142,6 @@ public class JobController {
 
 
     @GetMapping("/getJobsByJobId/{jobId}")
-
     public List<JobDTO> getJobsByJobId(@PathVariable UUID jobId) {
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>"+jobId);
         return jobService.getJobsByJobId(jobId);
@@ -193,8 +192,6 @@ public class JobController {
         List<JobDTO> jobs = jobService.searchJobs(category, keyword, location, type);
         System.out.println("search"+jobs);
 
-
-
         if (jobs.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(jobs);
         }
@@ -207,6 +204,18 @@ public class JobController {
         return ResponseEntity.ok(jobs);
     }
 
+
+    @GetMapping("/count")
+    public ResponseEntity<ResponseDTO>activeJobCount(){
+        try{
+            long act = jobService.activejobCount();
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created,"success",act));
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
 
 

@@ -36,7 +36,6 @@ public class CandidateController {
 
 
 
-
     @PostMapping(value = "/register" ,consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @PreAuthorize("hasAnyAuthority('CANDIDATE')")
     public ResponseEntity<ResponseDTO> saveCandidate(
@@ -142,6 +141,18 @@ public class CandidateController {
     }
 
 
+    @GetMapping("/count")
+    public ResponseEntity<ResponseDTO> getActiveCandidates(){
+
+        try {
+            long activeCandiate = candidateService.activeCandidatesCount();
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created,"sucsess",activeCandiate));
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 

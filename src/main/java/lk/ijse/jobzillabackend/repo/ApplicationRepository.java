@@ -12,15 +12,20 @@ import java.util.UUID;
 public interface ApplicationRepository extends JpaRepository<Application, UUID> {
 
 
-    @Query("SELECT a FROM Application a JOIN a.job j WHERE j.company.id = :companyId")
+/*
+    @Query("SELECT a FROM Application a JOIN a.job j WHERE j.company.cid = :companyId")
     Optional<Application> findApplicationsByCompanyId(@Param("companyId") UUID companyId);
+
+*/
+@Query("SELECT a FROM Application a JOIN a.job j WHERE j.company.cid = :companyId")
+Optional<Application> findApplicationsByCompanyId(@Param("companyId") UUID companyId);
 
 
 
     @Query("SELECT a FROM Application a " +
             "JOIN FETCH a.job j " +
             "JOIN FETCH j.company c " +
-            "WHERE a.candidate.id = :candidateId")
+            "WHERE a.candidate.cand_id = :candidateId")
     List<Application> findAppliedJobsByCandidateId(@Param("candidateId") UUID candidateId);
 
 

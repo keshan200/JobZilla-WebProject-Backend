@@ -18,5 +18,8 @@ public interface CandidateService {
     List<CandidateDTO> getCandidatesByCandId(UUID candId);
 
     List<CandidateDTO> getCandidateByUserId(UUID userId);
+
+    long activeCandidatesCount();
+
 }
 

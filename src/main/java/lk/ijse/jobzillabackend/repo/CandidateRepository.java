@@ -4,6 +4,7 @@ import lk.ijse.jobzillabackend.entity.Candidate;
 import lk.ijse.jobzillabackend.entity.Company;
 import lk.ijse.jobzillabackend.entity.SocialMedia;
 
+import lk.ijse.jobzillabackend.enums.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,6 @@ public interface CandidateRepository extends JpaRepository<Candidate, UUID> {
     Optional<Candidate> findByUser_Uid(UUID uid);
 
 
-
+    long countByUserStatus(Status user_status);
 
 }

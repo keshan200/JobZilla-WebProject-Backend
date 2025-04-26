@@ -49,6 +49,7 @@ public interface JobRepository extends JpaRepository<Job, UUID>{
     );
 
 
-
+    @Query("SELECT COUNT(j) FROM Job j WHERE j.status = 'ACTIVE'")
+    long countActiveJobs();
 
 }
